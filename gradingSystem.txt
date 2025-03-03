@@ -1,0 +1,44 @@
+[ {
+  "whenTaken" : [ 2025, 3, 1 ],
+  "name" : "English",
+  "tasksOnTest" : [ {
+    "numberOfTask" : 1,
+    "maxPoints" : 10,
+    "type" : "LISTENING"
+  }, {
+    "numberOfTask" : 2,
+    "maxPoints" : 15,
+    "type" : "USE_OF_ENGLISH"
+  }, {
+    "numberOfTask" : 3,
+    "maxPoints" : 20,
+    "type" : "WRITING"
+  } ],
+  "studentResults" : [ {
+    "studentName" : "John Doe",
+    "allGrades" : {
+      "Task number:3, maxPoints=20, type=WRITING" : {
+        "score" : 18
+      },
+      "Task number:1, maxPoints=10, type=LISTENING" : {
+        "score" : 8
+      },
+      "Task number:2, maxPoints=15, type=USE_OF_ENGLISH" : {
+        "score" : 12
+      }
+    }
+  }, {
+    "studentName" : "Jane Smith",
+    "allGrades" : {
+      "Task number:3, maxPoints=20, type=WRITING" : {
+        "score" : 16
+      },
+      "Task number:1, maxPoints=10, type=LISTENING" : {
+        "score" : 7
+      },
+      "Task number:2, maxPoints=15, type=USE_OF_ENGLISH" : {
+        "score" : 14
+      }
+    }
+  } ]
+} ]
