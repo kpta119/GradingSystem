@@ -12,7 +12,7 @@ import java.util.List;
 public class GradingSystemData {
     private static GradingSystemData instance = new GradingSystemData();
     private static String filename = "gradingSystem.txt";
-
+    private JsonClass jsonObject;
     private List<Test> testItems;
     private DateTimeFormatter formatter;
 
@@ -26,10 +26,15 @@ public class GradingSystemData {
 
     private GradingSystemData() {
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        jsonObject = new JsonClass();
     }
 
     public void setTestItems(List<Test> testItems) {
         this.testItems = testItems;
+    }
+
+    public DateTimeFormatter getDateFormatter() {
+        return formatter;
     }
 
     public void writeTestItems() throws Exception {
@@ -42,5 +47,8 @@ public class GradingSystemData {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+    public void loadTestItems() throws Exception {
+        jsonObject.loadTestItems();
     }
 }

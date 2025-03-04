@@ -20,7 +20,10 @@ public class StudentResult {
         this.studentName = studentName;
     }
 
-    public void addGrade(Task task, int score) {
+    public void  addGrade(Task task,int score) {
+        if (score > task.getMaxPoints()){
+            throw new InvalidScoreException("Score cannot be greater than max points in task");
+        }
         grades.put(task, new Grade(score));
     }
 
@@ -34,7 +37,13 @@ public class StudentResult {
 
     @Override
     public String toString() {
-        return studentName + " - Wyniki: " + grades;
+        return "\n Name Of Student: " + studentName + " - Wyniki: " + grades;
+    }
+
+    private static class InvalidScoreException extends RuntimeException {
+        public InvalidScoreException(String message) {
+            super(message);
+        }
     }
 }
 

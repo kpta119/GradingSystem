@@ -18,14 +18,24 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
+
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 
     @Override
-    public void stop() throws Exception{
+    public void stop(){
         try {
             GradingSystemData.getInstance().writeTestItems();
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void init() throws Exception{
+        try {
+            GradingSystemData.getInstance().loadTestItems();
         } catch(IOException e){
             System.out.println(e.getMessage());
         }

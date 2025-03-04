@@ -48,8 +48,8 @@ public class Test {
         return name;
     }
 
-    public LocalDate getWhenTaken() {
-        return whenTaken;
+    public String getWhenTaken() {
+        return whenTaken.format(GradingSystemData.getInstance().getDateFormatter());
     }
 
     public void addTask(Task task){
@@ -62,6 +62,6 @@ public class Test {
 
     @Override
     public String toString() {
-        return name + " - " + whenTaken;
+        return name + " When Taken: " +  getWhenTaken() ;
     }
 }

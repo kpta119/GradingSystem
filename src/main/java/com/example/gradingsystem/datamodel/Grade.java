@@ -15,8 +15,12 @@ public class Grade {
         if (score >= 0) {
             this.score = score;
         } else {
-            throw new IllegalArgumentException("Wynik musi być wiekszy od zera");
+            throw new IllegalArgumentException("Result cannot be less than 0");
         }
     }
 
+    @Override
+    public String toString() {
+        return "Score= " + score;
+    }
 }

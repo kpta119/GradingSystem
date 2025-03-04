@@ -1,5 +1,5 @@
 [ {
-  "whenTaken" : [ 2025, 3, 1 ],
+  "whenTaken" : "01-03-2025",
   "name" : "English",
   "tasksOnTest" : [ {
     "numberOfTask" : 1,
