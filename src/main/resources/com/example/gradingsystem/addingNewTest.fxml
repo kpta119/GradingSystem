@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -7,9 +6,10 @@
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.gradingsystem.AddingNewTest"
-            prefWidth="500" prefHeight="400">
+            stylesheets="@styles.css"
+            prefWidth="600" prefHeight="500">
     <headerText>
-        Instuctions hereeee
+        Dodawanie informacji o nowym teście
     </headerText>
     <content>
         <VBox spacing="10">
@@ -46,6 +46,7 @@
                 <Button text="Dodaj zadanie" GridPane.columnIndex="1" GridPane.rowIndex="3"
                     onAction="#handleAddTask"/>
             </GridPane>
+            <Button text="Dodaj ten test" prefWidth="150" prefHeight="50" styleClass="green-button" onAction="#handleAddTest"/>
         </VBox>
     </content>
 

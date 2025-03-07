@@ -1,7 +1,9 @@
 package com.example.gradingsystem;
 
+import com.example.gradingsystem.datamodel.GradingSystemData;
 import com.example.gradingsystem.datamodel.Task;
 import com.example.gradingsystem.datamodel.TaskType;
+import com.example.gradingsystem.datamodel.Test;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,6 +12,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class AddingNewTest {
@@ -74,7 +77,16 @@ public class AddingNewTest {
 
     @FXML
     public void handleAddTest(){
+        String testName = testNameField.getText();
+        LocalDate dateOfTest = testDatePicker.getValue();
+        if(testName.isEmpty() || dateOfTest == null) {
+            System.out.println("Błąd test musi miec nazwe i date kiedy sie odbył");
+            return;
+        }
+        GradingSystemData.getInstance().addTestItem(new Test(testName, dateOfTest, taskList));
 
+        testNameField.clear();
+        testDatePicker.setValue(null);
     }
 
 }
