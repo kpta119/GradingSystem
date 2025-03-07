@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.gradingsystem.AddingNewTest"
+            prefWidth="500" prefHeight="400">
+    <headerText>
+        Instuctions hereeee
+    </headerText>
+    <content>
+        <VBox spacing="10">
+            <GridPane vgap="10" hgap="10">
+                <Label text="Nazwa sprawdzianu: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="testNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="Data sprawdzianu: " GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="testDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <Label text="Zadania sprawdzianu:"/>
+            <ListView fx:id="taskListView" prefHeight="150"/>
+
+            <GridPane vgap="10" hgap="10">
+                <Label text="Numer zadania: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="numberOfTaskField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Maks. punkty:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="maxPointsField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Kategoria:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <ComboBox fx:id="categoryComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="LISTENING"/>
+                            <String fx:value="READING"/>
+                            <String fx:value="USE_OF_ENGLISH"/>
+                            <String fx:value="WRITING"/>
+                            <String fx:value="VOCABULARY"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
+                <Button text="Dodaj zadanie" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                    onAction="#handleAddTask"/>
+            </GridPane>
+        </VBox>
+    </content>
+
+</DialogPane>

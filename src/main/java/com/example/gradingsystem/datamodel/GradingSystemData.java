@@ -51,4 +51,8 @@ public class GradingSystemData {
     public void loadTestItems() throws Exception {
         jsonObject.loadTestItems();
     }
+
+    public void addTestItem(Test newTest) {
+        testItems.add(newTest);
+    }
 }

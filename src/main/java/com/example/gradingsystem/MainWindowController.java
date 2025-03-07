@@ -1,18 +1,23 @@
 package com.example.gradingsystem;
 
 import com.example.gradingsystem.datamodel.GradingSystemData;
-import com.example.gradingsystem.datamodel.Test;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.layout.BorderPane;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.util.Optional;
 
-public class HelloController {
-    private List<Test> testList = new ArrayList<>();
+public class MainWindowController {
+//    private List<Test> testList = new ArrayList<>();
     @FXML
     private ListView testListView;
+    @FXML
+    private BorderPane mainBorderPane;
 
 
     public void initialize() {
@@ -48,6 +53,31 @@ public class HelloController {
 //        GradingSystemData.getInstance().setTestItems(testList);
         testListView.getItems().setAll(GradingSystemData.getInstance().getTestItems());
         testListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    }
+
+    @FXML
+    public void showNewTestDialog(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("addingNewTest.fxml"));
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch(IOException e){
+            System.out.println("Couldn't load the dialog");
+            return;
+        }
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            System.out.println("Ok pressed");
+        }
+        else{
+            System.out.println("Cancel pressed");
+        }
+
     }
 
 }

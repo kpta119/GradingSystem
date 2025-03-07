@@ -4,18 +4,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.gradingsystem.HelloController">
+<?import javafx.scene.text.Text?>
+<BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.gradingsystem.MainWindowController">
     <top>
         <MenuBar>
-            <Menu text="File">
+            <Menu text="Testy">
                 <items>
-                    <MenuItem text="New..."/>
+                    <MenuItem text="Nowy" onAction="#showNewTestDialog"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Exit"/>
+                    <MenuItem text="Wyjdź"/>
                 </items>
             </Menu>
-            <Menu text="Delete">
+            <Menu text="Usuń">
 
             </Menu>
         </MenuBar>

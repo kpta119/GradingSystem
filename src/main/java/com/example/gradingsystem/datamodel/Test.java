@@ -11,6 +11,13 @@ public class Test {
     private List<StudentResult> studentResults;
 
 
+    public Test(String name, LocalDate whenTaken, List<Task> tasksOnTest) {
+        this.name = name;
+        this.whenTaken = whenTaken;
+        this.tasksOnTest = tasksOnTest;
+        this.studentResults = new ArrayList<>();
+    }
+
     public Test(String name, LocalDate whenTaken) {
         this.name = name;
         this.whenTaken = whenTaken;
