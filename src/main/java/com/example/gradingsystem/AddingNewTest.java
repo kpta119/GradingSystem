@@ -85,8 +85,10 @@ public class AddingNewTest {
         }
         GradingSystemData.getInstance().addTestItem(new Test(testName, dateOfTest, taskList));
 
+
         testNameField.clear();
         testDatePicker.setValue(null);
+        taskList.clear();
     }
 
 }

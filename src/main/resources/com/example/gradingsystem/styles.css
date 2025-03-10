@@ -1,4 +1,14 @@
 .green-button {
-    -fx-background-color: green;
+    -fx-background-color: #0da80d;
     -fx-text-fill: white;
+    x-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand
+}
+
+.green-button:hover {
+    -fx-background-color: #0b4c0d;
+    -fx-border-color: #2e7d32
 }

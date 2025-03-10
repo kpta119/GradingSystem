@@ -3,24 +3,24 @@ package com.example.gradingsystem.datamodel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import javafx.collections.ObservableList;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public class GradingSystemData {
     private static GradingSystemData instance = new GradingSystemData();
     private static String filename = "gradingSystem.txt";
     private JsonClass jsonObject;
-    private List<Test> testItems;
+    private ObservableList<Test> testItems;
     private DateTimeFormatter formatter;
 
     public static GradingSystemData getInstance() {
         return instance;
     }
 
-    public List<Test> getTestItems() {
+    public ObservableList<Test> getTestItems() {
         return testItems;
     }
 
@@ -29,7 +29,7 @@ public class GradingSystemData {
         jsonObject = new JsonClass();
     }
 
-    public void setTestItems(List<Test> testItems) {
+    public void setTestItems(ObservableList<Test> testItems){
         this.testItems = testItems;
     }
 

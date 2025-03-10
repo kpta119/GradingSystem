@@ -26,15 +26,9 @@
         </ListView>
     </left>
     <center>
-        <VBox style="-fx-background-color: white">
+        <VBox style="-fx-background-color: white" alignment="BOTTOM_RIGHT">
             <TextArea fx:id="testDetailsTextArea" VBox.vgrow="ALWAYS"/>
-            <HBox>
-                <Label text="Data wprowadzenia ostatnich zmian: " style="-fx-background-color: white">
-                    <font>
-                        <Font name="Times New Roman bold" size="20"/>
-                    </font>
-                </Label>
-            </HBox>
+            <Button text="Dodaj wyniki uczniów do sprawdzianu" onAction="#showNewStudentResultsDialog"/>
         </VBox>
     </center>
 </BorderPane>
