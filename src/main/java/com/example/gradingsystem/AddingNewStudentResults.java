@@ -16,11 +16,14 @@ public class AddingNewStudentResults {
     private GridPane taskGrid;
     @FXML
     private TextField studentNameField;
+    @FXML
+    private Label testTitleLabel;
 
     private Test selectedTest;
 
     public void setTest(Test test) {
         this.selectedTest = test;
+        testTitleLabel.setText(test.toString());
         loadTasks();
     }
 

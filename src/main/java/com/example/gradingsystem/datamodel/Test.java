@@ -69,6 +69,6 @@ public class Test {
 
     @Override
     public String toString() {
-        return name + " When Taken: " +  getWhenTaken() ;
+        return name + " - When Taken: " +  getWhenTaken() ;
     }
 }
