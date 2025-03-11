@@ -19,3 +19,17 @@
     -fx-alignment: center;
     -fx-padding: 10px;
 }
+
+.light-green-button {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-border-radius: 20;
+    -fx-padding: 10
+}
+
+.light-green-button:hover {
+    -fx-background-color: #07700c;
+    -fx-border-color: #2e7d32
+}

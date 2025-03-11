@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+
 <BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@styles.css"
             fx:controller="com.example.gradingsystem.MainWindowController">
     <top>
         <MenuBar>
@@ -26,9 +25,10 @@
         </ListView>
     </left>
     <center>
-        <VBox style="-fx-background-color: white" alignment="BOTTOM_RIGHT">
+        <VBox style="-fx-background-color: white" alignment="CENTER">
+            <Button text="Dodaj wyniki uczniów do sprawdzianu"  prefHeight="50" onAction="#showNewStudentResultsDialog"
+                styleClass="light-green-button"/>
             <TextArea fx:id="testDetailsTextArea" VBox.vgrow="ALWAYS"/>
-            <Button text="Dodaj wyniki uczniów do sprawdzianu" onAction="#showNewStudentResultsDialog"/>
         </VBox>
     </center>
 </BorderPane>
