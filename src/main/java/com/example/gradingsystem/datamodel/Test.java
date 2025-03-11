@@ -14,7 +14,7 @@ public class Test {
     public Test(String name, LocalDate whenTaken, List<Task> tasksOnTest) {
         this.name = name;
         this.whenTaken = whenTaken;
-        this.tasksOnTest = tasksOnTest;
+        this.tasksOnTest = new ArrayList<>(tasksOnTest);
         this.studentResults = new ArrayList<>();
     }
 

@@ -20,7 +20,7 @@ public class StudentResult {
         this.studentName = studentName;
     }
 
-    public void  addGrade(Task task,int score) {
+    public void addGrade(Task task,int score) {
         if (score > task.getMaxPoints()){
             throw new InvalidScoreException("Score cannot be greater than max points in task");
         }

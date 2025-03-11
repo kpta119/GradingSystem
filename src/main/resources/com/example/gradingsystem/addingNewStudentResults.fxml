@@ -26,7 +26,8 @@
                 <Label text="Punkty" GridPane.columnIndex="1"/>
                 <Label text="Max Punkty" GridPane.columnIndex="2"/>
             </GridPane>
-            <Button text="Dodaj wynik dla ucznia: " prefWidth="150" prefHeight="50" styleClass="green-button"/>
+            <Button text="Dodaj wynik dla ucznia: " prefWidth="150" prefHeight="50" styleClass="green-button"
+                onAction="#handleAddingStudentResults"/>
         </VBox>
     </content>
 </DialogPane>
