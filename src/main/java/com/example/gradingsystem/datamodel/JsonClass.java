@@ -18,8 +18,8 @@ public class JsonClass {
     private String getJSONFromFile() {
         String jsonText = "";
         try {
-            BufferedReader bufferedReader =
-                    new BufferedReader(new FileReader("gradingSystem.txt"));
+            String filename = GradingSystemData.getInstance().getFilename();
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {

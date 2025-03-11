@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 public class GradingSystemData {
     private static GradingSystemData instance = new GradingSystemData();
-    private static String filename = "gradingSystem.txt";
+    private static String filename = "gradingSystem.json";
     private JsonClass jsonObject;
     private ObservableList<Test> testItems;
     private DateTimeFormatter formatter;
@@ -22,6 +22,10 @@ public class GradingSystemData {
 
     public ObservableList<Test> getTestItems() {
         return testItems;
+    }
+
+    public String getFilename(){
+        return filename;
     }
 
     private GradingSystemData() {
