@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -16,7 +12,7 @@
     </headerText>
     <content>
         <HBox spacing="20">
-            <ListView fx:id="testListView" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <ListView fx:id="testListView" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="list-cell"/>
             <TextArea fx:id="testTextArea" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
         </HBox>
     </content>

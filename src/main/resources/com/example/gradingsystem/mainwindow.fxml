@@ -19,7 +19,7 @@
         </MenuBar>
     </top>
     <left>
-        <ListView fx:id="testListView">
+        <ListView fx:id="testListView" prefWidth="600" styleClass="list-cell">
         </ListView>
     </left>
     <center>

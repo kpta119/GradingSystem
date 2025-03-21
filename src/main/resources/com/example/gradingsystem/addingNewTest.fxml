@@ -21,7 +21,7 @@
             </GridPane>
 
             <Label text="Zadania sprawdzianu:"/>
-            <ListView fx:id="taskListView" prefHeight="150"/>
+            <ListView fx:id="taskListView" prefHeight="150" styleClass="list-cell"/>
 
             <GridPane vgap="10" hgap="10">
                 <Label text="Numer zadania: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
