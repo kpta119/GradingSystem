@@ -11,6 +11,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class MainWindowController {
     @FXML
@@ -66,6 +67,29 @@ public class MainWindowController {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
         dialog.showAndWait();
+    }
+
+    public void showDeleteTestDialog(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL fxmlResource = getClass().getResource("deletingTest.fxml");
+        if (fxmlResource == null) {
+            System.out.println("FXML file not found!");
+        } else {
+            fxmlLoader.setLocation(fxmlResource);
+        }
+
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e) {
+            System.out.println("Couldn't load the dialog");
+            return;
+        }
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        dialog.showAndWait();
+
     }
 }
 
