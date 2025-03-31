@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
             stylesheets="@styles.css"
             fx:controller="com.example.gradingsystem.MainWindowController">
@@ -24,9 +23,14 @@
     </left>
     <center>
         <VBox style="-fx-background-color: white" alignment="CENTER">
-            <Button text="Dodaj wyniki uczniów do sprawdzianu"  prefHeight="50" onAction="#showNewStudentResultsDialog"
-                styleClass="light-green-button"/>
             <TextArea fx:id="testDetailsTextArea" VBox.vgrow="ALWAYS"/>
+            <HBox style="-fx-background-color: white">
+                <Button text="Dodaj wyniki ucznia ze sprawdzianu" alignment="BOTTOM_LEFT" prefHeight="50" onAction="#showNewStudentResultsDialog"
+                        styleClass="light-green-button"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button text="Usuń wyniki ucznia ze sprawdzianu" alignment="TOP_RIGHT" prefHeight="50"
+                        styleClass="light-red-button"/>
+            </HBox>
         </VBox>
     </center>
 </BorderPane>
