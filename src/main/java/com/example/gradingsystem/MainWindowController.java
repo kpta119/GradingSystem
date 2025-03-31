@@ -1,28 +1,80 @@
 package com.example.gradingsystem;
 
-import com.example.gradingsystem.datamodel.GradingSystemData;
-import com.example.gradingsystem.datamodel.Test;
+import com.example.gradingsystem.datamodel.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.*;
 
 public class MainWindowController {
     @FXML
     private ListView<Test> testListView;
     @FXML
     private BorderPane mainBorderPane;
+    @FXML
+    private TextArea testDetailsTextArea;
 
 
     public void initialize() {
         testListView.setItems(GradingSystemData.getInstance().getTestItems());
         testListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        testListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTest, newTest) -> {
+            if (newTest != null) {
+                showTestStatistics();
+            }
+        });
+    }
+
+
+    private void showTestStatistics(){
+        Test selectedTest = testListView.getSelectionModel().getSelectedItem();
+        if (selectedTest == null) {
+            testDetailsTextArea.setText("Nie wybrano testu.");
+            return;
+        }
+
+        StringBuilder stats = new StringBuilder("Statystyki dla testu: " + selectedTest.getName() + "\n");
+
+        List<Task> taskFromSelectedTest = selectedTest.getTasksOnTest();
+        List<StudentResult> resultsFromSelectedTest = selectedTest.getStudentResults();
+        for (Task task : taskFromSelectedTest) {
+            List<Integer> scores = new ArrayList<>();
+            Map<Integer, String> scoreToStudent = new HashMap<>();
+
+            for (StudentResult studentRes : resultsFromSelectedTest) {
+                if (studentRes.getAllGrades().containsKey(task)) {
+                    Grade grade = studentRes.getAllGrades().get(task);
+                    int score = grade.getScore();
+                    scores.add(score);
+                    scoreToStudent.put(score, studentRes.getStudentName());
+                }
+            }
+
+            if (scores.isEmpty()) continue;
+
+            int maxScore = Collections.max(scores);
+            int minScore = Collections.min(scores);
+            String bestStudent = scoreToStudent.get(maxScore);
+            String worstStudent = scoreToStudent.get(minScore);
+
+            double mean = scores.stream().mapToInt(Integer::intValue).average().orElse(0);
+            double variance = scores.stream().mapToDouble(s -> Math.pow(s - mean, 2)).average().orElse(0);
+            double stdDev = Math.sqrt(variance);
+
+
+            stats.append(String.format("\nZadanie: %s ", task.getNumberOfTask()));
+            stats.append(String.format("Maksymalna liczba punktów: %d\n", task.getMaxPoints()));
+            stats.append(String.format("Najlepszy uczeń: %s (%d) / %d \n", bestStudent, maxScore, task.getMaxPoints()));
+            stats.append(String.format("Najgorszy uczeń: %s (%d) / %d\n", worstStudent, minScore, task.getMaxPoints()));
+            stats.append(String.format("Średnia: %.2f\n", mean));
+            stats.append(String.format("Odchylenie standardowe: %.2f\n", stdDev));
+        }
+
+        testDetailsTextArea.setText(stats.toString());
     }
 
 

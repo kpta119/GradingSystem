@@ -20,11 +20,11 @@
       "Task number:3, maxPoints=20, type=WRITING" : {
         "score" : 18
       },
-      "Task number:1, maxPoints=10, type=LISTENING" : {
-        "score" : 8
-      },
       "Task number:2, maxPoints=15, type=USE OF ENGLISH" : {
         "score" : 12
+      },
+      "Task number:1, maxPoints=10, type=LISTENING" : {
+        "score" : 8
       }
     }
   }, {
@@ -33,11 +33,24 @@
       "Task number:3, maxPoints=20, type=WRITING" : {
         "score" : 16
       },
-      "Task number:1, maxPoints=10, type=LISTENING" : {
-        "score" : 7
-      },
       "Task number:2, maxPoints=15, type=USE OF ENGLISH" : {
         "score" : 14
+      },
+      "Task number:1, maxPoints=10, type=LISTENING" : {
+        "score" : 7
+      }
+    }
+  }, {
+    "studentName" : "Mariusz Biesiadowo",
+    "allGrades" : {
+      "Task number:3, maxPoints=20, type=WRITING" : {
+        "score" : 20
+      },
+      "Task number:2, maxPoints=15, type=USE OF ENGLISH" : {
+        "score" : 15
+      },
+      "Task number:1, maxPoints=10, type=LISTENING" : {
+        "score" : 10
       }
     }
   } ]
@@ -143,12 +156,29 @@
   "studentResults" : [ {
     "studentName" : "Antoni Nowak",
     "allGrades" : {
-      "Task number:1, maxPoints=77, type=READING" : {
-        "score" : 23
-      },
       "Task number:2, maxPoints=23, type=WRITING" : {
         "score" : 11
+      },
+      "Task number:1, maxPoints=77, type=READING" : {
+        "score" : 23
       }
     }
   } ]
+}, {
+  "whenTaken" : "21-03-2025",
+  "name" : "tescik",
+  "tasksOnTest" : [ {
+    "numberOfTask" : 1,
+    "maxPoints" : 22,
+    "type" : "LISTENING"
+  }, {
+    "numberOfTask" : 2,
+    "maxPoints" : 13,
+    "type" : "VOCABULARY"
+  }, {
+    "numberOfTask" : 3,
+    "maxPoints" : 47,
+    "type" : "WRITING"
+  } ],
+  "studentResults" : [ ]
 } ]
