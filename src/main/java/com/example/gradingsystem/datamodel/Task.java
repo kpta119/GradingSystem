@@ -26,15 +26,24 @@ public class Task {
     }
 
     public void setNumberOfTask(int numberOfTask) {
+        if (numberOfTask < 0){
+            throw new IllegalArgumentException("Number of task should not be negative");
+        }
         this.numberOfTask = numberOfTask;
     }
 
     public void setType(TaskType type) {
+        if (type.equals(null)) {
+            throw new NullPointerException("Setting type of task shuold not be null");
+        }
         this.type = type;
     }
 
 
     public void setMaxPoints(int maxPoints) {
+        if (maxPoints <= 0){
+            throw new IllegalArgumentException("The maxPoints must be postive number");
+        }
         this.maxPoints = maxPoints;
     }
 
