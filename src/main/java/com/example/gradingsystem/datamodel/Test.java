@@ -7,8 +7,8 @@ import java.util.List;
 public class Test {
     private LocalDate whenTaken;
     private String name;
-    private List<Task> tasksOnTest;
-    private List<StudentResult> studentResults;
+    private List<Task> tasksOnTest = new ArrayList<>();
+    private List<StudentResult> studentResults = new ArrayList<>();
 
 
     public Test(String name, LocalDate whenTaken, List<Task> tasksOnTest) {
