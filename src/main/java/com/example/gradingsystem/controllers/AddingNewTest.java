@@ -1,6 +1,6 @@
-package com.example.gradingsystem;
+package com.example.gradingsystem.controllers;
 
-import com.example.gradingsystem.datamodel.GradingSystemData;
+import com.example.gradingsystem.dao.TestDAO;
 import com.example.gradingsystem.datamodel.Task;
 import com.example.gradingsystem.datamodel.TaskType;
 import com.example.gradingsystem.datamodel.Test;
@@ -49,7 +49,7 @@ public class AddingNewTest {
         TaskType category = categoryComboBox.getValue();
 
         if (numberOfTask.isEmpty() || maxPoints.isEmpty() || Objects.isNull(category)) {
-            System.out.println("Błąd Wprowadź numer zadania, maksymalną liczbę punktów i wybierz kategorię!");
+            System.out.println("Enter the task number, maximum number of points and select a category!");
             return;
         }
 
@@ -59,11 +59,11 @@ public class AddingNewTest {
             points = Integer.parseInt(maxPoints);
             number = Integer.parseInt(numberOfTask);
             if (points <= 0) {
-                System.out.println("Błąd Liczba punktów musi być większa niż 0!");
+                System.out.println("Error Number of points must be greater than 0!");
                 return;
             }
         } catch (NumberFormatException e) {
-            System.out.println("Błąd Maksymalna liczba punktów musi być liczbą!");
+            System.out.println("Error Maximum points must be a number!");
             return;
         }
 
@@ -80,11 +80,10 @@ public class AddingNewTest {
         String testName = testNameField.getText();
         LocalDate dateOfTest = testDatePicker.getValue();
         if(testName.isEmpty() || dateOfTest == null) {
-            System.out.println("Błąd test musi miec nazwe i date kiedy sie odbył");
+            System.out.println("The test must have a name and the date when it took place");
             return;
         }
-        GradingSystemData.getInstance().addTestItem(new Test(testName, dateOfTest, taskList));
-
+        TestDAO.getInstance().insertTest(new Test(testName, dateOfTest, taskList));
 
         testNameField.clear();
         testDatePicker.setValue(null);

@@ -4,7 +4,7 @@
 
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.gradingsystem.DeletingTest"
+            fx:controller="com.example.gradingsystem.controllers.DeletingTest"
             stylesheets="@styles.css"
             prefWidth="1200" prefHeight="800">
     <headerText>

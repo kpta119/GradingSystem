@@ -1,6 +1,8 @@
 package com.example.gradingsystem.datamodel;
 
 
+import org.bson.Document;
+
 public class Task {
     private int numberOfTask;
     private int maxPoints;
@@ -12,10 +14,22 @@ public class Task {
         this.type = type;
     }
 
+    public static Task fromDocument(Document taskDoc) {
+        int numberOfTask = taskDoc.getInteger("numberOfTask");
+        int maxPoints = taskDoc.getInteger("maxPoints");
+        String typeString  = taskDoc.getString("type");
+
+        TaskType type = TaskType.valueOf(typeString);
+        return new Task(numberOfTask, maxPoints, type);
+    }
+
+    public Document toDocument(){
+        return new Document("numberOfTask", numberOfTask).append("maxPoints", maxPoints).append("type", type.toString());
+    }
+
     public int getNumberOfTask() {
         return numberOfTask;
     }
-
 
     public TaskType getType() {
         return type;

@@ -1,4 +1,4 @@
-package com.example.gradingsystem;
+package com.example.gradingsystem.controllers;
 
 import com.example.gradingsystem.datamodel.GradingSystemData;
 import com.example.gradingsystem.datamodel.Task;
@@ -35,7 +35,7 @@ public class DeletingTest {
         List<Task> taskOfTest = newTest.getTasksOnTest();
         StringBuilder sb = new StringBuilder();
         for (Task task : taskOfTest) {
-            sb.append(String.format("Zadanie %d:\n Typ zadania: %s\n Maksymalna liczba punktów: %d\n",
+            sb.append(String.format("Task %d:\n Type of Task: %s\n Maximal number of points: %d\n",
                     task.getNumberOfTask(), task.getType(), task.getMaxPoints()));
             sb.append("-------------------------------------\n");
         }

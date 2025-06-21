@@ -1,7 +1,12 @@
 package com.example.gradingsystem.datamodel;
 
+import org.bson.Document;
+
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Test {
@@ -26,6 +31,48 @@ public class Test {
     }
     public Test(){}
 
+    public static Test fromDocument(Document doc) {
+        String name = doc.getString("name");
+        Date whenTakenDate = doc.getDate("whenTaken");
+        LocalDate whenTaken = whenTakenDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        List<Document> taskDocs = doc.getList("tasks", Document.class);
+        List<Task> tasks = new ArrayList<>();
+        for (Document taskDoc : taskDocs) {
+            tasks.add(Task.fromDocument(taskDoc));
+        }
+
+        List<Document> resultDocs = doc.getList("studentResults", Document.class);
+        List<StudentResult> studentResults = new ArrayList<>();
+        for (Document resultDoc : resultDocs) {
+            studentResults.add(StudentResult.fromDocument(resultDoc));
+        }
+
+        Test test = new Test(name, whenTaken, tasks);
+        for (StudentResult sr : studentResults) {
+            test.addStudentResult(sr);
+        }
+
+        return test;
+    }
+
+    public Document toDocument(){
+        List<Document> taskDocuments = tasksOnTest.stream()
+                .map(Task::toDocument)
+                .toList();
+
+        List<Document> studentsResultsDocuments = studentResults.stream()
+                .map(StudentResult::toDocument)
+                .toList();
+
+
+        return new Document("name", name)
+                .append("whenTaken", whenTaken)
+                .append("tasks", taskDocuments)
+                .append("studentResults", studentsResultsDocuments);
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -56,7 +103,7 @@ public class Test {
     }
 
     public String getWhenTaken() {
-        return whenTaken.format(GradingSystemData.getInstance().getDateFormatter());
+        return whenTaken.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     public void addTask(Task task){

@@ -1,5 +1,6 @@
-package com.example.gradingsystem;
+package com.example.gradingsystem.controllers;
 
+import com.example.gradingsystem.dao.TestDAO;
 import com.example.gradingsystem.datamodel.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +21,7 @@ public class MainWindowController {
 
 
     public void initialize() {
-        testListView.setItems(GradingSystemData.getInstance().getTestItems());
+        testListView.setItems(TestDAO.getInstance().getAllTests());
         testListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         testListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTest, newTest) -> {
             if (newTest != null) {
@@ -33,11 +34,11 @@ public class MainWindowController {
     private void showTestStatistics(){
         Test selectedTest = testListView.getSelectionModel().getSelectedItem();
         if (selectedTest == null) {
-            testDetailsTextArea.setText("Nie wybrano testu.");
+            testDetailsTextArea.setText("No test has been selected!");
             return;
         }
 
-        StringBuilder stats = new StringBuilder("Statystyki dla testu: " + selectedTest.getName() + "\n");
+        StringBuilder stats = new StringBuilder("Test statistics: " + selectedTest.getName() + "\n");
 
         List<Task> taskFromSelectedTest = selectedTest.getTasksOnTest();
         List<StudentResult> resultsFromSelectedTest = selectedTest.getStudentResults();
@@ -66,12 +67,12 @@ public class MainWindowController {
             double stdDev = Math.sqrt(variance);
 
 
-            stats.append(String.format("\nZadanie: %s ", task.getNumberOfTask()));
-            stats.append(String.format("Maksymalna liczba punktów: %d\n", task.getMaxPoints()));
-            stats.append(String.format("Najlepszy uczeń: %s (%d) / %d \n", bestStudent, maxScore, task.getMaxPoints()));
-            stats.append(String.format("Najgorszy uczeń: %s (%d) / %d\n", worstStudent, minScore, task.getMaxPoints()));
-            stats.append(String.format("Średnia: %.2f\n", mean));
-            stats.append(String.format("Odchylenie standardowe: %.2f\n", stdDev));
+            stats.append(String.format("\nTask: %s ", task.getNumberOfTask()));
+            stats.append(String.format("Maximal Number Of Points: %d\n", task.getMaxPoints()));
+            stats.append(String.format("The best student: %s (%d) / %d \n", bestStudent, maxScore, task.getMaxPoints()));
+            stats.append(String.format("The worst student: %s (%d) / %d\n", worstStudent, minScore, task.getMaxPoints()));
+            stats.append(String.format("Average: %.2f\n", mean));
+            stats.append(String.format("Standard deviation: %.2f\n", stdDev));
         }
 
         testDetailsTextArea.setText(stats.toString());
@@ -83,7 +84,7 @@ public class MainWindowController {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("addingNewTest.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/com/example/gradingsystem/addingNewTest.fxml"));
         try {
             dialog.getDialogPane().setContent(fxmlLoader.load());
         } catch (IOException e) {
@@ -98,7 +99,7 @@ public class MainWindowController {
     public void showNewStudentResultsDialog() {
         Test chosenTest = testListView.getSelectionModel().getSelectedItem();
         if (chosenTest == null) {
-            System.out.println("Nie wybrano testu!");
+            System.out.println("No test has been selected!");
             return;
         }
 

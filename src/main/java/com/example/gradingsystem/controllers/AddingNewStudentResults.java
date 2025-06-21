@@ -1,4 +1,4 @@
-package com.example.gradingsystem;
+package com.example.gradingsystem.controllers;
 
 import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.Task;
@@ -32,7 +32,7 @@ public class AddingNewStudentResults {
         for (int i = 0; i < allTasks.size(); i++) {
             Label taskLabel = new Label(String.valueOf(allTasks.get(i).getNumberOfTask()));
             TextField pointsField = new TextField();
-            pointsField.setPromptText("Punkty");
+            pointsField.setPromptText("Points");
 
             Label maxPointsLabel = new Label(String.valueOf(allTasks.get(i).getMaxPoints()));
 
@@ -63,20 +63,20 @@ public class AddingNewStudentResults {
                 try {
                     int score = Integer.parseInt(text);
                     if (score < 0 || score > task.getMaxPoints()) {
-                        System.out.println("Nieprawidłowa liczba punktów dla zadania " + task.getNumberOfTask());
+                        System.out.println("Incorrect number of points for the task " + task.getNumberOfTask());
                         hasErrors = true;
                         continue;
                     }
                     studentResult.addGrade(task, score);
                 } catch (NumberFormatException e) {
-                    System.out.println("Nieprawidłowy format liczby w zadaniu " + task.getNumberOfTask());
+                    System.out.println("Invalid number format in the problem " + task.getNumberOfTask());
                     hasErrors = true;
                 }
             }
         }
 
         if (hasErrors) {
-            System.out.println("Niektóre wyniki nie zostały zapisane z powodu błędnych danych.");
+            System.out.println("Some results were not saved due to incorrect data");
         }
 
         selectedTest.addStudentResult(studentResult);
