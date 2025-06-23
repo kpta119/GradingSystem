@@ -12,22 +12,22 @@
             stylesheets="@styles.css"
             prefWidth="1200" prefHeight="800">
     <headerText>
-        Dodawanie nowego wyniku sprawdzianu dla danego ucznia
+        Adding new student's result
     </headerText>
     <content>
         <VBox spacing="30" alignment="CENTER">
             <Label fx:id="testTitleLabel" text="Test: " styleClass="test-title"/>
             <GridPane>
-            <Label text="Imię i nazwisko studenta: " GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Label text="Student's name and surname: " GridPane.rowIndex="0" GridPane.columnIndex="0"/>
             <TextField fx:id="studentNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
             </GridPane>
 
             <GridPane fx:id="taskGrid" hgap="20" vgap="10">
-                <Label text="Zadanie" GridPane.columnIndex="0"/>
-                <Label text="Punkty" GridPane.columnIndex="1"/>
-                <Label text="Max Punkty" GridPane.columnIndex="2"/>
+                <Label text="Task" GridPane.columnIndex="0"/>
+                <Label text="Points" GridPane.columnIndex="1"/>
+                <Label text="Max Pooints" GridPane.columnIndex="2"/>
             </GridPane>
-            <Button text="Dodaj wynik dla ucznia: " prefWidth="150" prefHeight="50" styleClass="green-button"
+            <Button text="Add student's result: " prefWidth="150" prefHeight="50" styleClass="green-button"
                 onAction="#handleAddingStudentResults"/>
         </VBox>
     </content>

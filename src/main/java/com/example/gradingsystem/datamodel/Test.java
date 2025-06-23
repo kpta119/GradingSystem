@@ -1,6 +1,7 @@
 package com.example.gradingsystem.datamodel;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Test {
+    private ObjectId id;
     private LocalDate whenTaken;
     private String name;
     private List<Task> tasksOnTest = new ArrayList<>();
@@ -51,6 +53,7 @@ public class Test {
         }
 
         Test test = new Test(name, whenTaken, tasks);
+        test.setId(doc.getObjectId("_id"));
         for (StudentResult sr : studentResults) {
             test.addStudentResult(sr);
         }
@@ -74,6 +77,10 @@ public class Test {
                 .append("studentResults", studentsResultsDocuments);
     }
 
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -88,6 +95,10 @@ public class Test {
 
     public void setStudentResults(List<StudentResult> studentResults) {
         this.studentResults = studentResults;
+    }
+
+    public ObjectId getId() {
+        return id;
     }
 
     public List<StudentResult> getStudentResults() {

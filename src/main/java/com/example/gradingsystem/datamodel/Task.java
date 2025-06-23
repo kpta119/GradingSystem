@@ -3,6 +3,8 @@ package com.example.gradingsystem.datamodel;
 
 import org.bson.Document;
 
+import java.util.Objects;
+
 public class Task {
     private int numberOfTask;
     private int maxPoints;
@@ -66,5 +68,20 @@ public class Task {
         return "Task number:" + numberOfTask +
                 ", maxPoints=" + maxPoints +
                 ", type=" + type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Task other = (Task) obj;
+        return numberOfTask == other.numberOfTask &&
+                maxPoints == other.maxPoints;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numberOfTask, maxPoints);
     }
 }

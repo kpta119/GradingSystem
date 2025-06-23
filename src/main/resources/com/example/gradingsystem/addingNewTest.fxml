@@ -9,28 +9,28 @@
             stylesheets="@styles.css"
             prefWidth="1200" prefHeight="800">
     <headerText>
-        Dodawanie informacji o nowym teście
+        Adding info about new test
     </headerText>
     <content>
         <VBox spacing="10" alignment="CENTER">
             <GridPane vgap="10" hgap="10">
-                <Label text="Nazwa sprawdzianu: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label text="Name of the test: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                 <TextField fx:id="testNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-                <Label text="Data sprawdzianu: " GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label text="Date of the test: " GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                 <DatePicker fx:id="testDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
             </GridPane>
 
-            <Label text="Zadania sprawdzianu:"/>
+            <Label text="Tasks on the test:"/>
             <ListView fx:id="taskListView" prefHeight="150" styleClass="list-cell"/>
 
             <GridPane vgap="10" hgap="10">
-                <Label text="Numer zadania: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label text="Number of task: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                 <TextField fx:id="numberOfTaskField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-                <Label text="Maks. punkty:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label text="Max points:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                 <TextField fx:id="maxPointsField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                <Label text="Kategoria:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label text="Category:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                 <ComboBox fx:id="categoryComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
@@ -43,10 +43,10 @@
                     </items>
                 </ComboBox>
 
-                <Button text="Dodaj zadanie" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                <Button text="Add task" GridPane.columnIndex="1" GridPane.rowIndex="3"
                     onAction="#handleAddTask"/>
             </GridPane>
-            <Button text="Dodaj ten test" prefWidth="150" prefHeight="50" styleClass="green-button" onAction="#handleAddTest"/>
+            <Button text="Add the test" prefWidth="150" prefHeight="50" styleClass="green-button" onAction="#handleAddTest"/>
         </VBox>
     </content>
 

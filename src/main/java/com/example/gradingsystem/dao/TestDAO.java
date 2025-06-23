@@ -1,13 +1,16 @@
 package com.example.gradingsystem.dao;
 
 import com.example.gradingsystem.datamodel.MongoConnector;
-import com.example.gradingsystem.datamodel.TaskType;
+import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.Test;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class TestDAO {
 
@@ -39,13 +42,12 @@ public class TestDAO {
         testCollection.insertOne(doc);
     }
 
-    public static Document createTask(int numberOfTask, int maxPoints, TaskType type) {
-        return new Document()
-                .append("numberOfTask", numberOfTask)
-                .append("maxPoints", maxPoints)
-                .append("type", type);
+    public void addStudentResultToTest(ObjectId testId, StudentResult studentResult) {
+        Document doc = studentResult.toDocument();
+        testCollection.updateOne(
+                Filters.eq("_id", testId),
+                Updates.push("studentResults", doc));
     }
-
 
 }
 

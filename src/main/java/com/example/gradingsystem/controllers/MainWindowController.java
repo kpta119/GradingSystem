@@ -68,7 +68,7 @@ public class MainWindowController {
 
 
             stats.append(String.format("\nTask: %s ", task.getNumberOfTask()));
-            stats.append(String.format("Maximal Number Of Points: %d\n", task.getMaxPoints()));
+            stats.append(String.format("Max Points: %d\n", task.getMaxPoints()));
             stats.append(String.format("The best student: %s (%d) / %d \n", bestStudent, maxScore, task.getMaxPoints()));
             stats.append(String.format("The worst student: %s (%d) / %d\n", worstStudent, minScore, task.getMaxPoints()));
             stats.append(String.format("Average: %.2f\n", mean));
@@ -93,7 +93,10 @@ public class MainWindowController {
         }
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-        dialog.showAndWait();
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            testListView.setItems(TestDAO.getInstance().getAllTests());
+        }
     }
 
     public void showNewStudentResultsDialog() {
@@ -106,7 +109,7 @@ public class MainWindowController {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("addingNewStudentResults.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/com/example/gradingsystem/addingNewStudentResults.fxml"));
         try {
             dialog.getDialogPane().setContent(fxmlLoader.load());
 
@@ -119,14 +122,17 @@ public class MainWindowController {
         }
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-        dialog.showAndWait();
+        Optional<ButtonType> result =  dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            showTestStatistics();
+        }
     }
 
     public void showDeleteTestDialog(){
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL fxmlResource = getClass().getResource("deletingTest.fxml");
+        URL fxmlResource = getClass().getResource("/com/example/gradingsystem/deletingTest.fxml");
         if (fxmlResource == null) {
             System.out.println("FXML file not found!");
         } else {
@@ -142,7 +148,6 @@ public class MainWindowController {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
         dialog.showAndWait();
-
     }
 }
 

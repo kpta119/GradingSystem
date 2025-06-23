@@ -9,10 +9,10 @@
         <MenuBar>
             <Menu text="Testy">
                 <items>
-                    <MenuItem text="Nowy" onAction="#showNewTestDialog"/>
-                    <MenuItem text="Usuń" onAction="#showDeleteTestDialog"/>
+                    <MenuItem text="New" onAction="#showNewTestDialog"/>
+                    <MenuItem text="Delete" onAction="#showDeleteTestDialog"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Wyjdź"/>
+                    <MenuItem text="Exit"/>
                 </items>
             </Menu>
         </MenuBar>
@@ -25,10 +25,10 @@
         <VBox style="-fx-background-color: white" alignment="CENTER">
             <TextArea fx:id="testDetailsTextArea" VBox.vgrow="ALWAYS"/>
             <HBox style="-fx-background-color: white">
-                <Button text="Dodaj wyniki ucznia ze sprawdzianu" alignment="BOTTOM_LEFT" prefHeight="50" onAction="#showNewStudentResultsDialog"
+                <Button text="Add student's result from test" alignment="BOTTOM_LEFT" prefHeight="50" onAction="#showNewStudentResultsDialog"
                         styleClass="light-green-button"/>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Button text="Usuń wyniki ucznia ze sprawdzianu" alignment="TOP_RIGHT" prefHeight="50"
+                <Button text="Delete student's result from test" alignment="TOP_RIGHT" prefHeight="50"
                         styleClass="light-red-button"/>
             </HBox>
         </VBox>

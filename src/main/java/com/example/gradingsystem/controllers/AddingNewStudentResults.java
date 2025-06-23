@@ -1,5 +1,6 @@
 package com.example.gradingsystem.controllers;
 
+import com.example.gradingsystem.dao.TestDAO;
 import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.Task;
 import com.example.gradingsystem.datamodel.Test;
@@ -80,6 +81,8 @@ public class AddingNewStudentResults {
         }
 
         selectedTest.addStudentResult(studentResult);
+        TestDAO.getInstance().addStudentResultToTest(selectedTest.getId(), studentResult);
+
 
         studentNameField.clear();
         for (Node node : taskGrid.getChildren()) {
