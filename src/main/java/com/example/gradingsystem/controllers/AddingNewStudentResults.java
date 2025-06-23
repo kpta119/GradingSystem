@@ -48,7 +48,6 @@ public class AddingNewStudentResults {
         List<Task> allTasks = selectedTest.getTasksOnTest();
         String studentName = studentNameField.getText();
         StudentResult studentResult = new StudentResult(studentName);
-
         boolean hasErrors = false;
 
         for (Node node : taskGrid.getChildren()) {
@@ -66,29 +65,30 @@ public class AddingNewStudentResults {
                     if (score < 0 || score > task.getMaxPoints()) {
                         System.out.println("Incorrect number of points for the task " + task.getNumberOfTask());
                         hasErrors = true;
-                        continue;
+                        break;
                     }
                     studentResult.addGrade(task, score);
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid number format in the problem " + task.getNumberOfTask());
                     hasErrors = true;
+                    break;
                 }
             }
         }
 
-        if (hasErrors) {
-            System.out.println("Some results were not saved due to incorrect data");
+        if (!hasErrors) {
+            selectedTest.addStudentResult(studentResult);
+            TestDAO.getInstance().addStudentResultToTest(selectedTest.getId(), studentResult);
+
+            studentNameField.clear();
+
         }
 
-        selectedTest.addStudentResult(studentResult);
-        TestDAO.getInstance().addStudentResultToTest(selectedTest.getId(), studentResult);
-
-
-        studentNameField.clear();
         for (Node node : taskGrid.getChildren()) {
             if (node instanceof TextField textField) {
                 textField.clear();
             }
         }
+        studentNameField.clear();
     }
 }

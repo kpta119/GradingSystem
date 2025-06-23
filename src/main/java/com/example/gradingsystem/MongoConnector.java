@@ -1,4 +1,4 @@
-package com.example.gradingsystem.datamodel;
+package com.example.gradingsystem;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;

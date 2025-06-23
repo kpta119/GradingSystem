@@ -1,6 +1,6 @@
 package com.example.gradingsystem.dao;
 
-import com.example.gradingsystem.datamodel.MongoConnector;
+import com.example.gradingsystem.MongoConnector;
 import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.Test;
 import com.mongodb.client.MongoCollection;

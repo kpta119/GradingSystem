@@ -8,7 +8,7 @@
             stylesheets="@styles.css"
             prefWidth="1200" prefHeight="800">
     <headerText>
-        Wybieranie który test usunac
+        Choosing which test remove
     </headerText>
     <content>
         <HBox spacing="20">
