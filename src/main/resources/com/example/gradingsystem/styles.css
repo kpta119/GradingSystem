@@ -51,3 +51,24 @@
 .list-cell {
     -fx-font-size: 18px;
 }
+
+.task-header {
+    fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-padding: 0 0 5px 0;
+    -fx-font-weight: bold;
+}
+
+.stats-flow {
+    -fx-background-color: #f8f8f8;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-background-insets: 0;
+    -fx-border-color: #d0d0d0;
+    -fx-border-width: 1px;
+}
+
+.stats-text {
+    -fx-font-size: 16px;
+    -fx-fill: #333333;
+}

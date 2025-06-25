@@ -1,6 +1,6 @@
 package com.example.gradingsystem.controllers;
 
-import com.example.gradingsystem.datamodel.GradingSystemData;
+import com.example.gradingsystem.dao.TestDAO;
 import com.example.gradingsystem.datamodel.Task;
 import com.example.gradingsystem.datamodel.Test;
 import javafx.fxml.FXML;
@@ -17,7 +17,7 @@ public class DeletingTest {
     private TextArea testTextArea;
 
     public void initialize() {
-        testListView.setItems(GradingSystemData.getInstance().getTestItems());
+        testListView.setItems(TestDAO.getInstance().getAllTests());
         testListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         testListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTest, newTest) -> {

@@ -7,7 +7,7 @@
             fx:controller="com.example.gradingsystem.controllers.MainWindowController">
     <top>
         <MenuBar>
-            <Menu text="Testy">
+            <Menu text="Tests">
                 <items>
                     <MenuItem text="New" onAction="#showNewTestDialog"/>
                     <MenuItem text="Delete" onAction="#showDeleteTestDialog"/>
@@ -22,9 +22,11 @@
         </ListView>
     </left>
     <center>
-        <VBox style="-fx-background-color: white" alignment="CENTER">
-            <TextArea fx:id="testDetailsTextArea" VBox.vgrow="ALWAYS"/>
-            <HBox style="-fx-background-color: white">
+        <VBox>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                <VBox fx:id="vboxArea" style="-fx-background-color: white" alignment="CENTER"/>
+            </ScrollPane>
+            <HBox style="-fx-background-color: white" prefHeight="50">
                 <Button text="Add student's result from test" alignment="BOTTOM_LEFT" prefHeight="50" onAction="#showNewStudentResultsDialog"
                         styleClass="light-green-button"/>
                 <Pane HBox.hgrow="ALWAYS"/>

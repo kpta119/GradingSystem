@@ -1,11 +1,20 @@
 package com.example.gradingsystem.controllers;
 
 import com.example.gradingsystem.dao.TestDAO;
-import com.example.gradingsystem.datamodel.*;
+import com.example.gradingsystem.datamodel.Grade;
+import com.example.gradingsystem.datamodel.StudentResult;
+import com.example.gradingsystem.datamodel.Task;
+import com.example.gradingsystem.datamodel.Test;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,7 +26,7 @@ public class MainWindowController {
     @FXML
     private BorderPane mainBorderPane;
     @FXML
-    private TextArea testDetailsTextArea;
+    private VBox vboxArea;
 
 
     public void initialize() {
@@ -25,24 +34,33 @@ public class MainWindowController {
         testListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         testListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTest, newTest) -> {
             if (newTest != null) {
-                showTestStatistics();
+                showTestGeneralStatistics();
             }
         });
     }
 
 
-    private void showTestStatistics(){
+    private void showTestGeneralStatistics(){
         Test selectedTest = testListView.getSelectionModel().getSelectedItem();
+        VBox.setVgrow(vboxArea, Priority.ALWAYS);
+        vboxArea.getChildren().clear();
+        vboxArea.setMinHeight(Region.USE_PREF_SIZE);
+        Label testHeader = new Label();
+
         if (selectedTest == null) {
-            testDetailsTextArea.setText("No test has been selected!");
+            testHeader.setText("No test has been selected!");
+            vboxArea.getChildren().add(testHeader);
             return;
         }
 
-        StringBuilder stats = new StringBuilder("Test statistics: " + selectedTest.getName() + "\n");
+        String headerTestDescription = "Test statistics: " + selectedTest.getName() + "\n";
+        testHeader.setText(headerTestDescription);
 
         List<Task> taskFromSelectedTest = selectedTest.getTasksOnTest();
         List<StudentResult> resultsFromSelectedTest = selectedTest.getStudentResults();
+
         for (Task task : taskFromSelectedTest) {
+            StringBuilder stats = new StringBuilder();
             List<Integer> scores = new ArrayList<>();
             Map<Integer, String> scoreToStudent = new HashMap<>();
 
@@ -66,16 +84,32 @@ public class MainWindowController {
             double variance = scores.stream().mapToDouble(s -> Math.pow(s - mean, 2)).average().orElse(0);
             double stdDev = Math.sqrt(variance);
 
+            VBox taskContainer = new VBox();
+            VBox.setVgrow(taskContainer, Priority.NEVER);
+           // taskContainer.setPadding(new Insets(10, 0, 20, 0));
+            taskContainer.setStyle("-fx-border-color: lightgray; -fx-border-radius: 5; -fx-padding: 10;");
 
-            stats.append(String.format("\nTask: %s ", task.getNumberOfTask()));
+            Label headerTaskLabel = new Label("Task " + task.getNumberOfTask());
+            headerTaskLabel.getStyleClass().add("task-header");
+
             stats.append(String.format("Max Points: %d\n", task.getMaxPoints()));
             stats.append(String.format("The best student: %s (%d) / %d \n", bestStudent, maxScore, task.getMaxPoints()));
             stats.append(String.format("The worst student: %s (%d) / %d\n", worstStudent, minScore, task.getMaxPoints()));
             stats.append(String.format("Average: %.2f\n", mean));
             stats.append(String.format("Standard deviation: %.2f\n", stdDev));
-        }
 
-        testDetailsTextArea.setText(stats.toString());
+            TextFlow statsFlow = new TextFlow();
+            statsFlow.setMaxWidth(300);
+            statsFlow.setPadding(new Insets(5));
+            statsFlow.getStyleClass().add("stats-flow");
+            statsFlow.setMaxWidth(Double.MAX_VALUE);
+
+            Text statsText = new Text(stats.toString());
+            statsText.getStyleClass().add("stats-text");
+            statsFlow.getChildren().add(statsText);
+            taskContainer.getChildren().addAll(headerTaskLabel, statsFlow);
+            vboxArea.getChildren().add(taskContainer);
+        }
     }
 
 
@@ -124,7 +158,7 @@ public class MainWindowController {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
         Optional<ButtonType> result =  dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            showTestStatistics();
+            showTestGeneralStatistics();
         }
     }
 
