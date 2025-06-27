@@ -5,6 +5,8 @@ import com.example.gradingsystem.datamodel.Grade;
 import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.Task;
 import com.example.gradingsystem.datamodel.Test;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -17,7 +19,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 
 public class MainWindowController {
@@ -27,9 +28,21 @@ public class MainWindowController {
     private BorderPane mainBorderPane;
     @FXML
     private VBox vboxArea;
-
+    @FXML
+    private ContextMenu listContextMenu;
 
     public void initialize() {
+        listContextMenu = new ContextMenu();
+        MenuItem deleteMenuTest = new MenuItem("Delete");
+        deleteMenuTest.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Test test = testListView.getSelectionModel().getSelectedItem();
+                deleteTest(test);
+            }
+        });
+        listContextMenu.getItems().addAll(deleteMenuTest);
+
         testListView.setItems(TestDAO.getInstance().getAllTests());
         testListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         testListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTest, newTest) -> {
@@ -37,10 +50,47 @@ public class MainWindowController {
                 showTestGeneralStatistics();
             }
         });
+        testListView.getSelectionModel().selectFirst();
+
+        testListView.setCellFactory(listView -> {
+            ListCell<Test> cell = new ListCell<>() {
+                @Override
+                protected void updateItem(Test item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setContextMenu(null);
+                    } else {
+                        setText(item.toString());
+                        setContextMenu(listContextMenu);
+                    }
+                }
+            };
+            return cell;
+        });
     }
 
 
-    private void showTestGeneralStatistics(){
+    public void deleteTest(Test test) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Test");
+        List<Task>  taskOfTest = test.getTasksOnTest();
+        StringBuilder sb = new StringBuilder();
+        for (Task task : taskOfTest) {
+            sb.append(String.format("\nTask %d:\n Type of Task: %s\n Maximal number of points: %d\n",
+                    task.getNumberOfTask(), task.getType(), task.getMaxPoints()));
+            sb.append("-------------------------------------\n");
+        }
+        alert.setHeaderText("Deleting test: " + test.toString() + sb.toString());
+        alert.setContentText("Are you sure? Press OK to confirm, or cancel to back out");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            TestDAO.getInstance().deleteTest(test.getId());
+            testListView.setItems(TestDAO.getInstance().getAllTests());
+        }
+    }
+
+    private void showTestGeneralStatistics() {
         Test selectedTest = testListView.getSelectionModel().getSelectedItem();
         VBox.setVgrow(vboxArea, Priority.ALWAYS);
         vboxArea.getChildren().clear();
@@ -86,7 +136,6 @@ public class MainWindowController {
 
             VBox taskContainer = new VBox();
             VBox.setVgrow(taskContainer, Priority.NEVER);
-           // taskContainer.setPadding(new Insets(10, 0, 20, 0));
             taskContainer.setStyle("-fx-border-color: lightgray; -fx-border-radius: 5; -fx-padding: 10;");
 
             Label headerTaskLabel = new Label("Task " + task.getNumberOfTask());
@@ -133,6 +182,7 @@ public class MainWindowController {
         }
     }
 
+    @FXML
     public void showNewStudentResultsDialog() {
         Test chosenTest = testListView.getSelectionModel().getSelectedItem();
         if (chosenTest == null) {
@@ -156,32 +206,11 @@ public class MainWindowController {
         }
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-        Optional<ButtonType> result =  dialog.showAndWait();
+        Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             showTestGeneralStatistics();
         }
     }
-
-    public void showDeleteTestDialog(){
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.initOwner(mainBorderPane.getScene().getWindow());
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        URL fxmlResource = getClass().getResource("/com/example/gradingsystem/deletingTest.fxml");
-        if (fxmlResource == null) {
-            System.out.println("FXML file not found!");
-        } else {
-            fxmlLoader.setLocation(fxmlResource);
-        }
-
-        try {
-            dialog.getDialogPane().setContent(fxmlLoader.load());
-        } catch (IOException e) {
-            System.out.println("Couldn't load the dialog");
-            return;
-        }
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-        dialog.showAndWait();
-    }
 }
+
 

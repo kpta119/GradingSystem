@@ -49,5 +49,8 @@ public class TestDAO {
                 Updates.push("studentResults", doc));
     }
 
+    public void deleteTest(ObjectId testId){
+        testCollection.deleteOne(Filters.eq("_id", testId));
+    }
 }
 

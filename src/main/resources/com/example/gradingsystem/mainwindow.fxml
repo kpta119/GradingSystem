@@ -10,7 +10,6 @@
             <Menu text="Tests">
                 <items>
                     <MenuItem text="New" onAction="#showNewTestDialog"/>
-                    <MenuItem text="Delete" onAction="#showDeleteTestDialog"/>
                     <SeparatorMenuItem/>
                     <MenuItem text="Exit"/>
                 </items>
