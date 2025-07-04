@@ -2,19 +2,44 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
             stylesheets="@styles.css"
             fx:controller="com.example.gradingsystem.controllers.MainWindowController">
     <top>
-        <MenuBar>
-            <Menu text="Tests">
-                <items>
-                    <MenuItem text="New" onAction="#showNewTestDialog"/>
-                    <SeparatorMenuItem/>
-                    <MenuItem text="Exit"/>
-                </items>
-            </Menu>
-        </MenuBar>
+        <VBox>
+            <MenuBar>
+                <Menu text="Tests">
+                    <items>
+                        <MenuItem text="New" onAction="#showNewTestDialog"/>
+                        <SeparatorMenuItem/>
+                        <MenuItem text="Exit"/>
+                    </items>
+                </Menu>
+            </MenuBar>
+            <ToolBar>
+                <HBox spacing="16">
+                    <Button onAction="#showNewTestDialog">
+                        <tooltip>
+                                <Tooltip text="Add a new Test"/>
+                        </tooltip>
+                        <graphic>
+                            <ImageView>
+                                <Image url="@/plus-solid.png" requestedWidth="24" requestedHeight="28"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="filterDateButton" text="All tests" onAction="#handleFilterDateButton" minWidth="60" minHeight="28">
+                        <tooltip>
+                            <Tooltip text="Select date range"/>
+                        </tooltip>
+                    </Button>
+                </HBox>
+            </ToolBar>
+        </VBox>
     </top>
     <left>
         <ListView fx:id="testListView" prefWidth="600" styleClass="list-cell">

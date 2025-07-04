@@ -113,7 +113,11 @@ public class Test {
         return name;
     }
 
-    public String getWhenTaken() {
+    public LocalDate getWhenTaken() {
+        return whenTaken;
+    }
+
+    public String getWhenTakenString() {
         return whenTaken.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
@@ -127,6 +131,6 @@ public class Test {
 
     @Override
     public String toString() {
-        return name + " - When Taken: " +  getWhenTaken() ;
+        return name + " - When Taken: " +  getWhenTakenString() ;
     }
 }

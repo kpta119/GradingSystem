@@ -5,21 +5,21 @@ import com.example.gradingsystem.datamodel.Grade;
 import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.Task;
 import com.example.gradingsystem.datamodel.Test;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Predicate;
 
 public class MainWindowController {
     @FXML
@@ -30,6 +30,11 @@ public class MainWindowController {
     private VBox vboxArea;
     @FXML
     private ContextMenu listContextMenu;
+    @FXML
+    private Button filterDateButton;
+
+    private FilteredList<Test> filteredList;
+    private Predicate<Test> wantAllTests;
 
     public void initialize() {
         listContextMenu = new ContextMenu();
@@ -43,7 +48,15 @@ public class MainWindowController {
         });
         listContextMenu.getItems().addAll(deleteMenuTest);
 
-        testListView.setItems(TestDAO.getInstance().getAllTests());
+        wantAllTests = new Predicate<Test>() {
+            @Override
+            public boolean test(Test test) {
+                return true;
+            }
+        };
+        filteredList = new FilteredList<>(TestDAO.getInstance().getAllTests(), wantAllTests);
+
+        testListView.setItems(filteredList);
         testListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         testListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTest, newTest) -> {
             if (newTest != null) {
@@ -86,7 +99,6 @@ public class MainWindowController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             TestDAO.getInstance().deleteTest(test.getId());
-            testListView.setItems(TestDAO.getInstance().getAllTests());
         }
     }
 
@@ -177,9 +189,6 @@ public class MainWindowController {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
         Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            testListView.setItems(TestDAO.getInstance().getAllTests());
-        }
     }
 
     @FXML
@@ -210,6 +219,60 @@ public class MainWindowController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             showTestGeneralStatistics();
         }
+    }
+
+    public void handleFilterDateButton(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Filter tests by date");
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+
+        DatePicker fromDatePicker = new DatePicker();
+        DatePicker toDatePicker = new DatePicker();
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        grid.add(new Label("From:"), 0, 0);
+        grid.add(fromDatePicker, 1, 0);
+        grid.add(new Label("To:"), 0, 1);
+        grid.add(toDatePicker, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            LocalDate fromDate = fromDatePicker.getValue();
+            LocalDate toDate = toDatePicker.getValue();
+
+            if (fromDate != null && toDate != null) {
+                filterDateButton.setText("From: " + fromDate + " To: " + toDate);
+                filterTestsByDate(fromDate, toDate);
+            }
+        }
+    }
+
+    private void filterTestsByDate(LocalDate fromDate, LocalDate toDate){
+        Test selectedTest = testListView.getSelectionModel().getSelectedItem();
+        filteredList.setPredicate(new Predicate<Test>() {
+            @Override
+            public boolean test(Test test) {
+                if (test.getWhenTaken() == null){
+                    return false;
+                }
+                return ((!test.getWhenTaken().isBefore(fromDate)) && (!test.getWhenTaken().isAfter(toDate)));
+            }
+        });
+        if (filteredList.isEmpty()){
+            vboxArea.getChildren().clear();
+        } else if(filteredList.contains(selectedTest)){
+            testListView.getSelectionModel().select(selectedTest);
+        } else{
+            testListView.getSelectionModel().selectFirst();
+        }
+
     }
 }
 
