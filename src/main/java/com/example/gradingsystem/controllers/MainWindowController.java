@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -32,6 +34,8 @@ public class MainWindowController {
     private ContextMenu listContextMenu;
     @FXML
     private Button filterDateButton;
+    @FXML
+    private ImageView imageViewPlusLogo;
 
     private FilteredList<Test> filteredList;
     private Predicate<Test> wantAllTests;
@@ -47,6 +51,9 @@ public class MainWindowController {
             }
         });
         listContextMenu.getItems().addAll(deleteMenuTest);
+
+        Image image = new Image(getClass().getResourceAsStream("/com/example/gradingsystem/images/plus-solid.png"));
+        imageViewPlusLogo.setImage(image);
 
         wantAllTests = new Predicate<Test>() {
             @Override
