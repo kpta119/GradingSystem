@@ -41,7 +41,12 @@ public class MainWindowController {
     private ImageView imageViewPlusLogo;
     @FXML
     private ImageView imageViewRollback;
-
+    @FXML
+    private HBox toolBarHBox;
+    @FXML
+    private Button newTestButton;
+    @FXML
+    private Button rollbackButton;
 
     private ObservableList<Test> baseList = FXCollections.observableArrayList(TestDAO.getInstance().getTests());
     private FilteredList<Test> filteredList;
@@ -59,6 +64,8 @@ public class MainWindowController {
         });
         listContextMenu.getItems().addAll(deleteMenuTest);
 
+        HBox.setMargin(newTestButton, new Insets(0, 20, 0, 0));
+        HBox.setMargin(filterDateButton, new Insets(0, 8, 0, 0));
         Image imagePlus = new Image(getClass().getResourceAsStream("/com/example/gradingsystem/images/plus-solid.png"));
         imageViewPlusLogo.setImage(imagePlus);
 
