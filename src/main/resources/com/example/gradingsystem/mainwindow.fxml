@@ -19,7 +19,7 @@
                 </Menu>
             </MenuBar>
             <ToolBar>
-                <HBox spacing="16">
+                <HBox fx:id="toolBarHbox">
                     <Button onAction="#showNewTestDialog">
                         <tooltip>
                                 <Tooltip text="Add a new Test"/>
@@ -28,11 +28,18 @@
                             <ImageView fx:id="imageViewPlusLogo" fitWidth="24" fitHeight="28"/>
                         </graphic>
                     </Button>
-
                     <Button fx:id="filterDateButton" text="All tests" onAction="#handleFilterDateButton" minWidth="60" minHeight="28">
                         <tooltip>
                             <Tooltip text="Select date range"/>
                         </tooltip>
+                    </Button>
+                    <Button onAction="#rollbackToAllTests">
+                        <tooltip>
+                            <Tooltip text="Show all Tests"/>
+                        </tooltip>
+                        <graphic>
+                            <ImageView fx:id="imageViewRollback" fitWidth="24" fitHeight="28"/>
+                        </graphic>
                     </Button>
                 </HBox>
             </ToolBar>

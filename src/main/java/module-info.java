@@ -6,6 +6,7 @@ module com.example.gradingsystem {
     requires org.mongodb.driver.core;
     requires java.dotenv;
     requires java.desktop;
+    requires annotations;
 
     opens com.example.gradingsystem to javafx.fxml;
     exports com.example.gradingsystem;

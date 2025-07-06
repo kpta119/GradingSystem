@@ -5,6 +5,8 @@ import com.example.gradingsystem.datamodel.Grade;
 import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.Task;
 import com.example.gradingsystem.datamodel.Test;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -36,7 +39,11 @@ public class MainWindowController {
     private Button filterDateButton;
     @FXML
     private ImageView imageViewPlusLogo;
+    @FXML
+    private ImageView imageViewRollback;
 
+
+    private ObservableList<Test> baseList = FXCollections.observableArrayList(TestDAO.getInstance().getTests());
     private FilteredList<Test> filteredList;
     private Predicate<Test> wantAllTests;
 
@@ -52,8 +59,11 @@ public class MainWindowController {
         });
         listContextMenu.getItems().addAll(deleteMenuTest);
 
-        Image image = new Image(getClass().getResourceAsStream("/com/example/gradingsystem/images/plus-solid.png"));
-        imageViewPlusLogo.setImage(image);
+        Image imagePlus = new Image(getClass().getResourceAsStream("/com/example/gradingsystem/images/plus-solid.png"));
+        imageViewPlusLogo.setImage(imagePlus);
+
+        Image imageRollback = new Image(getClass().getResourceAsStream("/com/example/gradingsystem/images/rollback.png"));
+        imageViewRollback.setImage(imageRollback);
 
         wantAllTests = new Predicate<Test>() {
             @Override
@@ -61,7 +71,7 @@ public class MainWindowController {
                 return true;
             }
         };
-        filteredList = new FilteredList<>(TestDAO.getInstance().getAllTests(), wantAllTests);
+        filteredList = new FilteredList<>(baseList, wantAllTests);
 
         testListView.setItems(filteredList);
         testListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -91,23 +101,7 @@ public class MainWindowController {
     }
 
 
-    public void deleteTest(Test test) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Test");
-        List<Task>  taskOfTest = test.getTasksOnTest();
-        StringBuilder sb = new StringBuilder();
-        for (Task task : taskOfTest) {
-            sb.append(String.format("\nTask %d:\n Type of Task: %s\n Maximal number of points: %d\n",
-                    task.getNumberOfTask(), task.getType(), task.getMaxPoints()));
-            sb.append("-------------------------------------\n");
-        }
-        alert.setHeaderText("Deleting test: " + test.toString() + sb.toString());
-        alert.setContentText("Are you sure? Press OK to confirm, or cancel to back out");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            TestDAO.getInstance().deleteTest(test.getId());
-        }
-    }
+
 
     private void showTestGeneralStatistics() {
         Test selectedTest = testListView.getSelectionModel().getSelectedItem();
@@ -180,6 +174,26 @@ public class MainWindowController {
         }
     }
 
+    public void deleteTest(@NotNull Test test) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Test");
+        List<Task>  taskOfTest = test.getTasksOnTest();
+        StringBuilder sb = new StringBuilder();
+        for (Task task : taskOfTest) {
+            sb.append(String.format("\nTask %d:\n Type of Task: %s\n Maximal number of points: %d\n",
+                    task.getNumberOfTask(), task.getType(), task.getMaxPoints()));
+            sb.append("-------------------------------------\n");
+        }
+        alert.setHeaderText("Deleting test: " + test.toString() + sb.toString());
+        alert.setContentText("Are you sure? Press OK to confirm, or cancel to back out");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            TestDAO.getInstance().deleteTest(test.getId());
+            setTestListViewToFilteredListWantAllTests();
+            filterDateButton.setText("All tests");
+        }
+    }
+
 
     @FXML
     public void showNewTestDialog() {
@@ -196,6 +210,10 @@ public class MainWindowController {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
         Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            setTestListViewToFilteredListWantAllTests();
+            filterDateButton.setText("All tests");
+        }
     }
 
     @FXML
@@ -261,8 +279,31 @@ public class MainWindowController {
         }
     }
 
+    public void rollbackToAllTests(){
+        setTestListViewToFilteredListWantAllTests();
+        filterDateButton.setText("All tests");
+    }
+
     private void filterTestsByDate(LocalDate fromDate, LocalDate toDate){
         Test selectedTest = testListView.getSelectionModel().getSelectedItem();
+        setTestListViewToFilteredListBasedOnDates(fromDate, toDate);
+        if (filteredList.isEmpty()){
+            vboxArea.getChildren().clear();
+        } else if(filteredList.contains(selectedTest)){
+            testListView.getSelectionModel().select(selectedTest);
+        } else{
+            testListView.getSelectionModel().selectFirst();
+        }
+    }
+
+    private void setTestListViewToFilteredListWantAllTests(){
+        ObservableList<Test> allTests = TestDAO.getInstance().getTests();
+        baseList.setAll(allTests);
+        filteredList.setPredicate(wantAllTests);
+        testListView.setItems(filteredList);
+    }
+
+    private void setTestListViewToFilteredListBasedOnDates(LocalDate fromDate, LocalDate toDate){
         filteredList.setPredicate(new Predicate<Test>() {
             @Override
             public boolean test(Test test) {
@@ -272,14 +313,7 @@ public class MainWindowController {
                 return ((!test.getWhenTaken().isBefore(fromDate)) && (!test.getWhenTaken().isAfter(toDate)));
             }
         });
-        if (filteredList.isEmpty()){
-            vboxArea.getChildren().clear();
-        } else if(filteredList.contains(selectedTest)){
-            testListView.getSelectionModel().select(selectedTest);
-        } else{
-            testListView.getSelectionModel().selectFirst();
-        }
-
+        testListView.setItems(filteredList);
     }
 }
 
