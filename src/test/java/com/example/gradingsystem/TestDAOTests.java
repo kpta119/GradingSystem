@@ -43,4 +43,11 @@ public class TestDAOTests {
         assertEquals("Math Test", tests.get(0).getName());
         assertEquals(LocalDate.of(2025, 7, 6), tests.get(0).getWhenTaken());
     }
+
+
+    @Test
+    void testNoTestsInDatabase(){
+        List<com.example.gradingsystem.datamodel.Test> tests = TestDAO.getInstance().getTests();
+        assertEquals(0, tests.size());
+    }
 }
