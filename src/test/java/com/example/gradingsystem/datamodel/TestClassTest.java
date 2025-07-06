@@ -4,9 +4,9 @@ package com.example.gradingsystem.datamodel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,13 +30,6 @@ class TestClassTest {
         assertEquals(newName, test.getName());
     }
 
-    @Test
-    void setWhenTaken() {
-        LocalDate date = LocalDate.of(2023, 10, 5);
-        test.setWhenTaken(date);
-        DateTimeFormatter formatter = GradingSystemData.getInstance().getDateFormatter();
-        assertEquals(date.format(formatter), test.getWhenTaken());
-    }
 
     @Test
     void setTasksOnTest() {

@@ -1,6 +1,5 @@
 package com.example.gradingsystem.dao;
 
-import com.example.gradingsystem.MongoConnector;
 import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.Test;
 import com.mongodb.client.MongoCollection;
@@ -16,17 +15,20 @@ public class TestDAO {
 
     private static TestDAO instance;
     private final MongoCollection<Document> testCollection;
-    //private final ObservableList<Test> tests = FXCollections.observableArrayList();
 
-    public TestDAO() {
-        MongoDatabase database = MongoConnector.getInstance().getDatabase();
+    private TestDAO(MongoDatabase database) {
         this.testCollection = database.getCollection("tests");
-        //loadTestsFromDatabase();
+    }
+
+    public static void init(MongoDatabase database) {
+        if (instance == null) {
+            instance = new TestDAO(database);
+        }
     }
 
     public static TestDAO getInstance() {
         if (instance == null) {
-            instance = new TestDAO();
+            throw new IllegalStateException("TestDAO is not initialized. Call init(database) first.");
         }
         return instance;
     }
@@ -42,7 +44,6 @@ public class TestDAO {
     public void insertTest(Test test) {
         Document doc = test.toDocument();
         testCollection.insertOne(doc);
-        //tests.add(test);
     }
 
     public void addStudentResultToTest(ObjectId testId, StudentResult studentResult) {
@@ -54,14 +55,7 @@ public class TestDAO {
 
     public void deleteTest(ObjectId testId){
         testCollection.deleteOne(Filters.eq("_id", testId));
-        //tests.removeIf(test -> test.getId().equals(testId));
     }
 
-//    private void loadTestsFromDatabase() {
-//        tests.clear();
-//        for (Document doc : testCollection.find()) {
-//            tests.add(Test.fromDocument(doc));
-//        }
-//    }
 }
 
