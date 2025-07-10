@@ -139,6 +139,7 @@ public class MainWindowController {
 
         List<Task> taskFromSelectedTest = selectedTest.getTasksOnTest();
         List<StudentResult> resultsFromSelectedTest = selectedTest.getStudentResults();
+        List<Task> emptyTasks = new ArrayList<>();
 
         for (Task task : taskFromSelectedTest) {
             StringBuilder stats = new StringBuilder();
@@ -154,40 +155,53 @@ public class MainWindowController {
                 }
             }
 
-            if (scores.isEmpty()) continue;
+            if (!scores.isEmpty()) {
+                int maxScore = Collections.max(scores);
+                int minScore = Collections.min(scores);
+                String bestStudent = scoreToStudent.get(maxScore);
+                String worstStudent = scoreToStudent.get(minScore);
 
-            int maxScore = Collections.max(scores);
-            int minScore = Collections.min(scores);
-            String bestStudent = scoreToStudent.get(maxScore);
-            String worstStudent = scoreToStudent.get(minScore);
+                double mean = scores.stream().mapToInt(Integer::intValue).average().orElse(0);
+                double variance = scores.stream().mapToDouble(s -> Math.pow(s - mean, 2)).average().orElse(0);
+                double stdDev = Math.sqrt(variance);
 
-            double mean = scores.stream().mapToInt(Integer::intValue).average().orElse(0);
-            double variance = scores.stream().mapToDouble(s -> Math.pow(s - mean, 2)).average().orElse(0);
-            double stdDev = Math.sqrt(variance);
+                VBox taskContainer = new VBox();
+                VBox.setVgrow(taskContainer, Priority.NEVER);
+                taskContainer.getStyleClass().add("task-container");
+
+                Label headerTaskLabel = new Label("Task " + task.getNumberOfTask());
+                headerTaskLabel.getStyleClass().add("task-header");
+
+                stats.append(String.format("Max Points: %d\n", task.getMaxPoints()));
+                stats.append(String.format("The best student: %s (%d) / %d \n", bestStudent, maxScore, task.getMaxPoints()));
+                stats.append(String.format("The worst student: %s (%d) / %d\n", worstStudent, minScore, task.getMaxPoints()));
+                stats.append(String.format("Average: %.2f\n", mean));
+                stats.append(String.format("Standard deviation: %.2f\n", stdDev));
+
+                TextFlow statsFlow = new TextFlow();
+                statsFlow.setMaxWidth(300);
+                statsFlow.setPadding(new Insets(5));
+                statsFlow.getStyleClass().add("stats-flow");
+                statsFlow.setMaxWidth(Double.MAX_VALUE);
+
+                Text statsText = new Text(stats.toString());
+                statsText.getStyleClass().add("stats-text");
+                statsFlow.getChildren().add(statsText);
+                taskContainer.getChildren().addAll(headerTaskLabel, statsFlow);
+                vboxArea.getChildren().add(taskContainer);
+                continue;
+            }
 
             VBox taskContainer = new VBox();
             VBox.setVgrow(taskContainer, Priority.NEVER);
-            taskContainer.setStyle("-fx-border-color: lightgray; -fx-border-radius: 5; -fx-padding: 10;");
+            taskContainer.getStyleClass().add("task-container");
 
             Label headerTaskLabel = new Label("Task " + task.getNumberOfTask());
             headerTaskLabel.getStyleClass().add("task-header");
 
-            stats.append(String.format("Max Points: %d\n", task.getMaxPoints()));
-            stats.append(String.format("The best student: %s (%d) / %d \n", bestStudent, maxScore, task.getMaxPoints()));
-            stats.append(String.format("The worst student: %s (%d) / %d\n", worstStudent, minScore, task.getMaxPoints()));
-            stats.append(String.format("Average: %.2f\n", mean));
-            stats.append(String.format("Standard deviation: %.2f\n", stdDev));
-
-            TextFlow statsFlow = new TextFlow();
-            statsFlow.setMaxWidth(300);
-            statsFlow.setPadding(new Insets(5));
-            statsFlow.getStyleClass().add("stats-flow");
-            statsFlow.setMaxWidth(Double.MAX_VALUE);
-
-            Text statsText = new Text(stats.toString());
-            statsText.getStyleClass().add("stats-text");
-            statsFlow.getChildren().add(statsText);
-            taskContainer.getChildren().addAll(headerTaskLabel, statsFlow);
+            Label noResultsLabel = new Label("No Results available");
+            noResultsLabel.getStyleClass().add("no-results-label");
+            taskContainer.getChildren().addAll(headerTaskLabel, noResultsLabel);
             vboxArea.getChildren().add(taskContainer);
         }
     }

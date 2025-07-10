@@ -72,3 +72,14 @@
     -fx-font-size: 16px;
     -fx-fill: #333333;
 }
+
+.task-container {
+    -fx-border-color: lightgray;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+
+.no-results-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #ff0000;
+}

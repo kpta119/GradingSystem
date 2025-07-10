@@ -8,8 +8,6 @@ module com.example.gradingsystem {
     requires java.desktop;
     requires annotations;
 
-    opens com.example.gradingsystem to javafx.fxml;
     exports com.example.gradingsystem;
-    exports com.example.gradingsystem.controllers;
     opens com.example.gradingsystem.controllers to  javafx.fxml;
 }
