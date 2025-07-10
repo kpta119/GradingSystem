@@ -8,6 +8,7 @@ import com.example.gradingsystem.datamodel.Test;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -50,6 +51,7 @@ public class MainWindowController {
 
     private ObservableList<Test> baseList = FXCollections.observableArrayList(TestDAO.getInstance().getTests());
     private FilteredList<Test> filteredList;
+    private SortedList<Test> sortedList;
     private Predicate<Test> wantAllTests;
 
     public void initialize() {
@@ -72,6 +74,8 @@ public class MainWindowController {
         Image imageRollback = new Image(getClass().getResourceAsStream("/com/example/gradingsystem/images/rollback.png"));
         imageViewRollback.setImage(imageRollback);
 
+
+
         wantAllTests = new Predicate<Test>() {
             @Override
             public boolean test(Test test) {
@@ -80,7 +84,14 @@ public class MainWindowController {
         };
         filteredList = new FilteredList<>(baseList, wantAllTests);
 
-        testListView.setItems(filteredList);
+        sortedList = new SortedList<Test>(filteredList, new Comparator<Test>() {
+            @Override
+            public int compare(Test o1, Test o2) {
+                return o1.getWhenTaken().compareTo(o2.getWhenTaken());
+            }
+        });
+
+        testListView.setItems(sortedList);
         testListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         testListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTest, newTest) -> {
             if (newTest != null) {
@@ -307,7 +318,7 @@ public class MainWindowController {
         ObservableList<Test> allTests = TestDAO.getInstance().getTests();
         baseList.setAll(allTests);
         filteredList.setPredicate(wantAllTests);
-        testListView.setItems(filteredList);
+        testListView.setItems(sortedList);
     }
 
     private void setTestListViewToFilteredListBasedOnDates(LocalDate fromDate, LocalDate toDate){
@@ -320,7 +331,7 @@ public class MainWindowController {
                 return ((!test.getWhenTaken().isBefore(fromDate)) && (!test.getWhenTaken().isAfter(toDate)));
             }
         });
-        testListView.setItems(filteredList);
+        testListView.setItems(sortedList);
     }
 }
 
