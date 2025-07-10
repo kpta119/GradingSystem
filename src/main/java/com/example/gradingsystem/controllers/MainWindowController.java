@@ -5,6 +5,7 @@ import com.example.gradingsystem.datamodel.Grade;
 import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.Task;
 import com.example.gradingsystem.datamodel.Test;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -14,12 +15,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -139,7 +143,6 @@ public class MainWindowController {
 
         List<Task> taskFromSelectedTest = selectedTest.getTasksOnTest();
         List<StudentResult> resultsFromSelectedTest = selectedTest.getStudentResults();
-        List<Task> emptyTasks = new ArrayList<>();
 
         for (Task task : taskFromSelectedTest) {
             StringBuilder stats = new StringBuilder();
@@ -204,6 +207,10 @@ public class MainWindowController {
             taskContainer.getChildren().addAll(headerTaskLabel, noResultsLabel);
             vboxArea.getChildren().add(taskContainer);
         }
+        Button showDetailedResultsButton = new Button();
+        showDetailedResultsButton.setText("Show detailed test results");
+        showDetailedResultsButton.setOnAction(event -> openDetailedResultsWindow(selectedTest));
+        vboxArea.getChildren().add(showDetailedResultsButton);
     }
 
     public void deleteTest(@NotNull Test test) {
@@ -346,6 +353,50 @@ public class MainWindowController {
             }
         });
         testListView.setItems(sortedList);
+    }
+
+    private void openDetailedResultsWindow(Test selectedTest) {
+        Stage stage = new Stage();
+        stage.setTitle("Detailed Results");
+
+        TableView<StudentResult> tableView = new TableView<>();
+
+        TableColumn<StudentResult, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStudentName()));
+        tableView.getColumns().add(nameCol);
+
+        List<StudentResult> studentResults = selectedTest.getStudentResults();
+        Set<Task> allTasks = new LinkedHashSet<>();
+        for (StudentResult sr : studentResults) {
+            allTasks.addAll(sr.getAllGrades().keySet());
+        }
+
+        List<Task> sortedTask = allTasks.stream().sorted(new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                return Integer.compare(o1.getNumberOfTask(), o2.getNumberOfTask());
+            }
+        }).toList();
+
+        for (Task task : sortedTask) {
+            TableColumn<StudentResult, String> taskCol = new TableColumn<>("Task " + task.getNumberOfTask());
+            taskCol.setCellValueFactory(data -> {
+                Grade grade = data.getValue().getAllGrades().get(task);
+                String scoreStr = grade != null ? String.valueOf(grade.getScore()) : "-";
+                return new SimpleStringProperty(scoreStr);
+            });
+            tableView.getColumns().add(taskCol);
+        }
+
+        tableView.setItems(FXCollections.observableArrayList(studentResults));
+
+        VBox layout = new VBox(tableView);
+        layout.setPadding(new Insets(10));
+        Scene scene = new Scene(layout, 800, 800);
+
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 }
 
