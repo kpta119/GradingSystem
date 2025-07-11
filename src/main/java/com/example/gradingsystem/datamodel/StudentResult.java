@@ -80,7 +80,7 @@ public class StudentResult {
 
     private static Task parseTaskFromKey(String key) {
         String[] parts = key.split(", ");
-        int numberOfTask = Integer.parseInt(parts[0].split(":")[1]);
+        String numberOfTask = parts[0].split(":")[1];
         int maxPoints = Integer.parseInt(parts[1].split("=")[1]);
         String typeStr = parts[2].split("=")[1].replace(" ", "_");
 

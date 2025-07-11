@@ -219,7 +219,7 @@ public class MainWindowController {
         List<Task>  taskOfTest = test.getTasksOnTest();
         StringBuilder sb = new StringBuilder();
         for (Task task : taskOfTest) {
-            sb.append(String.format("\nTask %d:\n Type of Task: %s\n Maximal number of points: %d\n",
+            sb.append(String.format("\nTask %s:\n Type of Task: %s\n Maximal number of points: %d\n",
                     task.getNumberOfTask(), task.getType(), task.getMaxPoints()));
             sb.append("-------------------------------------\n");
         }
@@ -374,7 +374,7 @@ public class MainWindowController {
         List<Task> sortedTask = allTasks.stream().sorted(new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {
-                return Integer.compare(o1.getNumberOfTask(), o2.getNumberOfTask());
+                return o1.getNumberOfTask().compareTo(o2.getNumberOfTask());
             }
         }).toList();
 

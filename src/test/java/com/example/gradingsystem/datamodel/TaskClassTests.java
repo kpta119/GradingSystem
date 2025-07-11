@@ -11,19 +11,19 @@ class TaskClassTests {
 
     @BeforeEach
     void setup(){
-        task = new Task(1,100, TaskType.LISTENING);
+        task = new Task("1",100, TaskType.LISTENING);
     }
 
     @Test
     void testConstructorAndGetters() {
-        assertEquals(1, task.getNumberOfTask());
+        assertEquals("1", task.getNumberOfTask());
         assertEquals(100, task.getMaxPoints());
         assertEquals(TaskType.LISTENING, task.getType());
     }
     @Test
     void testSetters() {
-        task.setNumberOfTask(2);
-        assertEquals(2, task.getNumberOfTask());
+        task.setNumberOfTask("2");
+        assertEquals("2", task.getNumberOfTask());
 
         task.setMaxPoints(50);
         assertEquals(50, task.getMaxPoints());
@@ -45,12 +45,6 @@ class TaskClassTests {
         });
     }
 
-    @Test
-    void testSetNumberOfTaskWithNegativeValue() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            task.setNumberOfTask(-5);
-        });
-    }
 
     @Test
     void testSetTypeWithNull() {

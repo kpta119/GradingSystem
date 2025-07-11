@@ -17,9 +17,9 @@ class TestClassTest {
     @BeforeEach
     void setup(){
         test = new com.example.gradingsystem.datamodel.Test();
-        Task task1 = new Task(1,100, TaskType.LISTENING);
-        Task task2 = new Task(2,20, TaskType.READING);
-        Task task3 = new Task(3,50, TaskType.WRITING);
+        Task task1 = new Task("1",100, TaskType.LISTENING);
+        Task task2 = new Task("2",20, TaskType.READING);
+        Task task3 = new Task("3",50, TaskType.WRITING);
         test.setTasksOnTest(Arrays.asList(task1, task2, task3));
     }
 
@@ -33,7 +33,7 @@ class TestClassTest {
 
     @Test
     void setTasksOnTest() {
-        List<Task> newTasks = Collections.singletonList(new Task(4, 75, TaskType.USE_OF_ENGLISH));
+        List<Task> newTasks = Collections.singletonList(new Task("4", 75, TaskType.USE_OF_ENGLISH));
         test.setTasksOnTest(newTasks);
         assertEquals(1, test.getTasksOnTest().size());
         assertEquals(75, test.getTasksOnTest().get(0).getMaxPoints());

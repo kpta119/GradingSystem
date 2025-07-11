@@ -6,18 +6,18 @@ import org.bson.Document;
 import java.util.Objects;
 
 public class Task {
-    private int numberOfTask;
+    private String numberOfTask;
     private int maxPoints;
     private TaskType type;
 
-    public Task(int numberOfTask, int maxPoints, TaskType type) {
+    public Task(String numberOfTask, int maxPoints, TaskType type) {
         this.numberOfTask = numberOfTask;
         this.maxPoints = maxPoints;
         this.type = type;
     }
 
     public static Task fromDocument(Document taskDoc) {
-        int numberOfTask = taskDoc.getInteger("numberOfTask");
+        String numberOfTask = taskDoc.getString("numberOfTask");
         int maxPoints = taskDoc.getInteger("maxPoints");
         String typeString  = taskDoc.getString("type");
 
@@ -29,7 +29,7 @@ public class Task {
         return new Document("numberOfTask", numberOfTask).append("maxPoints", maxPoints).append("type", type.toString());
     }
 
-    public int getNumberOfTask() {
+    public String getNumberOfTask() {
         return numberOfTask;
     }
 
@@ -41,10 +41,7 @@ public class Task {
         return maxPoints;
     }
 
-    public void setNumberOfTask(int numberOfTask) {
-        if (numberOfTask < 0){
-            throw new IllegalArgumentException("Number of task should not be negative");
-        }
+    public void setNumberOfTask(String numberOfTask) {
         this.numberOfTask = numberOfTask;
     }
 
@@ -76,12 +73,13 @@ public class Task {
         if (obj == null || getClass() != obj.getClass()) return false;
 
         Task other = (Task) obj;
-        return numberOfTask == other.numberOfTask &&
-                maxPoints == other.maxPoints;
+        return Objects.equals(numberOfTask, other.getNumberOfTask()) &&
+                maxPoints == other.maxPoints &&
+                type == other.getType();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(numberOfTask, maxPoints);
+        return Objects.hash(numberOfTask, maxPoints, type);
     }
 }

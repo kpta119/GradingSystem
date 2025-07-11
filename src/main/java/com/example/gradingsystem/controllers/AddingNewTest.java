@@ -54,10 +54,8 @@ public class AddingNewTest {
         }
 
         int points;
-        int number;
         try {
             points = Integer.parseInt(maxPoints);
-            number = Integer.parseInt(numberOfTask);
             if (points <= 0) {
                 System.out.println("Error Number of points must be greater than 0!");
                 return;
@@ -67,7 +65,7 @@ public class AddingNewTest {
             return;
         }
 
-        Task task = new Task(number, points, category);
+        Task task = new Task(numberOfTask, points, category);
         taskList.add(task);
 
         numberOfTaskField.clear();
