@@ -119,7 +119,6 @@ public class MainWindowController {
 
 
 
-
     private void showTestGeneralStatistics() {
         Test selectedTest = testListView.getSelectionModel().getSelectedItem();
         VBox.setVgrow(vboxArea, Priority.ALWAYS);
@@ -281,6 +280,16 @@ public class MainWindowController {
         }
     }
 
+    @FXML
+    public void deleteStudentResults() {
+        Test chosenTest = testListView.getSelectionModel().getSelectedItem();
+        if (chosenTest == null) {
+            System.out.println("No test has been selected!");
+            return;
+        }
+        openDetailedResultsWindow(chosenTest);
+    }
+
     public void handleFilterDateButton(){
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Filter tests by date");
@@ -309,7 +318,7 @@ public class MainWindowController {
 
             if (fromDate != null && toDate != null) {
                 filterDateButton.setText("From: " + fromDate + " To: " + toDate);
-                filterTestsByDate(fromDate, toDate);
+                setTestListViewToFilteredListBasedOnDates(fromDate, toDate);
             }
         }
     }
@@ -319,26 +328,18 @@ public class MainWindowController {
         filterDateButton.setText("All tests");
     }
 
-    private void filterTestsByDate(LocalDate fromDate, LocalDate toDate){
-        Test selectedTest = testListView.getSelectionModel().getSelectedItem();
-        setTestListViewToFilteredListBasedOnDates(fromDate, toDate);
-        if (filteredList.isEmpty()){
-            vboxArea.getChildren().clear();
-        } else if(filteredList.contains(selectedTest)){
-            testListView.getSelectionModel().select(selectedTest);
-        } else{
-            testListView.getSelectionModel().selectFirst();
-        }
-    }
 
     private void setTestListViewToFilteredListWantAllTests(){
+        Test selectedTest = testListView.getSelectionModel().getSelectedItem();
         ObservableList<Test> allTests = TestDAO.getInstance().getTests();
         baseList.setAll(allTests);
         filteredList.setPredicate(wantAllTests);
         testListView.setItems(sortedList);
+        refreshItemsOnTestListView(selectedTest);
     }
 
     private void setTestListViewToFilteredListBasedOnDates(LocalDate fromDate, LocalDate toDate){
+        Test selectedTest = testListView.getSelectionModel().getSelectedItem();
         filteredList.setPredicate(new Predicate<>() {
             @Override
             public boolean test(Test test) {
@@ -349,6 +350,7 @@ public class MainWindowController {
             }
         });
         testListView.setItems(sortedList);
+        refreshItemsOnTestListView(selectedTest);
     }
 
     private void openDetailedResultsWindow(Test selectedTest) {
@@ -381,8 +383,12 @@ public class MainWindowController {
                 String scoreStr = grade != null ? String.valueOf(grade.getScore()) : "-";
                 return new SimpleStringProperty(scoreStr);
             });
+            taskCol.setStyle("-fx-alignment: CENTER");
             tableView.getColumns().add(taskCol);
         }
+
+        TableColumn<StudentResult, Void> deleteCol = getStudentResultDeleteTableColumn(selectedTest, tableView);
+        tableView.getColumns().add(deleteCol);
 
         tableView.setItems(FXCollections.observableArrayList(studentResults));
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -394,6 +400,46 @@ public class MainWindowController {
 
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
+    }
+
+    @NotNull
+    private TableColumn<StudentResult, Void> getStudentResultDeleteTableColumn(Test selectedTest, TableView<StudentResult> tableView) {
+        TableColumn<StudentResult, Void> deleteCol = new TableColumn<>("Delete");
+        deleteCol.setCellFactory(col -> new TableCell<>() {
+            private final Button deleteBtn = new Button("Delete results");
+
+            {
+                deleteBtn.setOnAction(event -> {
+                    StudentResult sr = getTableView().getItems().get(getIndex());
+                    selectedTest.getStudentResults().remove(sr);
+                    tableView.getItems().remove(sr);
+                    TestDAO.getInstance().deleteStudentResult(selectedTest.getId(), sr.getStudentName());
+                    setTestListViewToFilteredListWantAllTests();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteBtn);
+                }
+            }
+        });
+        deleteCol.setStyle("-fx-alignment: CENTER");
+        return deleteCol;
+    }
+
+    private void refreshItemsOnTestListView(Test selectedTest){
+        if (filteredList.isEmpty()){
+            vboxArea.getChildren().clear();
+        } else if(filteredList.contains(selectedTest)){
+            testListView.getSelectionModel().select(selectedTest);
+        } else{
+            testListView.getSelectionModel().selectFirst();
+        }
     }
 }
 

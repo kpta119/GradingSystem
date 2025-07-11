@@ -57,5 +57,13 @@ public class TestDAO {
         testCollection.deleteOne(Filters.eq("_id", testId));
     }
 
+    public void deleteStudentResult(ObjectId testId, String studentName){
+        testCollection.updateOne(
+                Filters.eq("_id", testId),
+                Updates.pull("studentResults", Filters.eq("studentName", studentName))
+        );
+
+    }
+
 }
 

@@ -55,7 +55,7 @@
                 <Button text="Add student's result from test" alignment="BOTTOM_LEFT" prefHeight="50" onAction="#showNewStudentResultsDialog"
                         styleClass="light-green-button"/>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Button text="Delete student's result from test" alignment="TOP_RIGHT" prefHeight="50"
+                <Button text="Delete student's result from test" alignment="TOP_RIGHT" prefHeight="50" onAction="#deleteStudentResults"
                         styleClass="light-red-button"/>
             </HBox>
         </VBox>
