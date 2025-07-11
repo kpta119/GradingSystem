@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 <BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
             stylesheets="@../styles/styles.css"
             fx:controller="com.example.gradingsystem.controllers.MainWindowController">
@@ -11,15 +10,13 @@
         <VBox>
             <MenuBar>
                 <Menu text="Tests">
-                    <items>
-                        <MenuItem text="New" onAction="#showNewTestDialog"/>
-                        <SeparatorMenuItem/>
-                        <MenuItem text="Exit"/>
-                    </items>
+                    <MenuItem text="New" onAction="#showNewTestDialog"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Exit"/>
                 </Menu>
             </MenuBar>
             <ToolBar>
-                <HBox fx:id="toolBarHBox">
+                <HBox>
                     <Button fx:id="newTestButton" onAction="#showNewTestDialog">
                         <tooltip>
                                 <Tooltip text="Add a new Test"/>
@@ -33,7 +30,7 @@
                             <Tooltip text="Select date range"/>
                         </tooltip>
                     </Button>
-                    <Button fx:id="rollbackButton" onAction="#rollbackToAllTests">
+                    <Button onAction="#rollbackToAllTests">
                         <tooltip>
                             <Tooltip text="Show all Tests"/>
                         </tooltip>
