@@ -6,7 +6,7 @@
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.gradingsystem.controllers.AddingNewTest"
-            stylesheets="@styles.css"
+            stylesheets="@../styles/styles.css"
             prefWidth="1200" prefHeight="800">
     <headerText>
         Adding info about new test

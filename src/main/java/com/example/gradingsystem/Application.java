@@ -17,7 +17,7 @@ public class Application extends javafx.application.Application {
         MongoConnector.init(uri);
         MongoDatabase database = MongoConnector.getInstance().getDatabase();
         TestDAO.init(database);
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("/com/example/gradingsystem/mainwindow.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("/com/example/gradingsystem/views/mainwindow.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1500, 1000);
         stage.setTitle("System for entering school results!");
         stage.setScene(scene);

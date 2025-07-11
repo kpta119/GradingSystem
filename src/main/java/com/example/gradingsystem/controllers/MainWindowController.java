@@ -209,6 +209,7 @@ public class MainWindowController {
         }
         Button showDetailedResultsButton = new Button();
         showDetailedResultsButton.setText("Show detailed test results");
+        showDetailedResultsButton.getStyleClass().add("green-button");
         showDetailedResultsButton.setOnAction(event -> openDetailedResultsWindow(selectedTest));
         vboxArea.getChildren().add(showDetailedResultsButton);
     }
@@ -239,7 +240,7 @@ public class MainWindowController {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/com/example/gradingsystem/addingNewTest.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/com/example/gradingsystem/views/addingNewTest.fxml"));
         try {
             dialog.getDialogPane().setContent(fxmlLoader.load());
         } catch (IOException e) {
@@ -266,7 +267,7 @@ public class MainWindowController {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/com/example/gradingsystem/addingNewStudentResults.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/com/example/gradingsystem/views/addingNewStudentResults.fxml"));
         try {
             dialog.getDialogPane().setContent(fxmlLoader.load());
 
@@ -389,12 +390,13 @@ public class MainWindowController {
         }
 
         tableView.setItems(FXCollections.observableArrayList(studentResults));
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         VBox layout = new VBox(tableView);
-        layout.setPadding(new Insets(10));
         Scene scene = new Scene(layout, 800, 800);
-
+        scene.getStylesheets().add(getClass().getResource("/com/example/gradingsystem/styles/styles.css").toExternalForm());
         stage.setScene(scene);
+
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }

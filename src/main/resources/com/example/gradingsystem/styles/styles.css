@@ -81,5 +81,39 @@
 
 .no-results-label {
     -fx-font-size: 16px;
-    -fx-text-fill: #ff0000;
+    -fx-text-fill: red;
+}
+
+.table-view {
+    -fx-border-color: transparent;
+}
+
+.table-view .virtual-flow .clipped-container {
+    -fx-background-color: linear-gradient(#b0f377 0%, #97df84 100%);
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #bcbaba;
+    -fx-border-width: 2px;
+    -fx-border-color: grey;
+}
+
+.table-view .column-header-background .label {
+    -fx-text-fill: black;
+}
+
+.table-view .table-row-cell:filled:selected .text {
+    -fx-fill: black;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #b4d57f;
 }
