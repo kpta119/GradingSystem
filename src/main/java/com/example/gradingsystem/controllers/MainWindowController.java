@@ -47,13 +47,9 @@ public class MainWindowController {
     @FXML
     private ImageView imageViewRollback;
     @FXML
-    private HBox toolBarHBox;
-    @FXML
     private Button newTestButton;
-    @FXML
-    private Button rollbackButton;
 
-    private ObservableList<Test> baseList = FXCollections.observableArrayList(TestDAO.getInstance().getTests());
+    private final ObservableList<Test> baseList = FXCollections.observableArrayList(TestDAO.getInstance().getTests());
     private FilteredList<Test> filteredList;
     private SortedList<Test> sortedList;
     private Predicate<Test> wantAllTests;
@@ -61,7 +57,7 @@ public class MainWindowController {
     public void initialize() {
         listContextMenu = new ContextMenu();
         MenuItem deleteMenuTest = new MenuItem("Delete");
-        deleteMenuTest.setOnAction(new EventHandler<ActionEvent>() {
+        deleteMenuTest.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Test test = testListView.getSelectionModel().getSelectedItem();
@@ -80,7 +76,7 @@ public class MainWindowController {
 
 
 
-        wantAllTests = new Predicate<Test>() {
+        wantAllTests = new Predicate<>() {
             @Override
             public boolean test(Test test) {
                 return true;
@@ -88,7 +84,7 @@ public class MainWindowController {
         };
         filteredList = new FilteredList<>(baseList, wantAllTests);
 
-        sortedList = new SortedList<Test>(filteredList, new Comparator<Test>() {
+        sortedList = new SortedList<>(filteredList, new Comparator<>() {
             @Override
             public int compare(Test o1, Test o2) {
                 return o1.getWhenTaken().compareTo(o2.getWhenTaken());
@@ -105,7 +101,7 @@ public class MainWindowController {
         testListView.getSelectionModel().selectFirst();
 
         testListView.setCellFactory(listView -> {
-            ListCell<Test> cell = new ListCell<>() {
+            return new ListCell<>() {
                 @Override
                 protected void updateItem(Test item, boolean empty) {
                     super.updateItem(item, empty);
@@ -118,7 +114,6 @@ public class MainWindowController {
                     }
                 }
             };
-            return cell;
         });
     }
 
@@ -224,7 +219,7 @@ public class MainWindowController {
                     task.getNumberOfTask(), task.getType(), task.getMaxPoints()));
             sb.append("-------------------------------------\n");
         }
-        alert.setHeaderText("Deleting test: " + test.toString() + sb.toString());
+        alert.setHeaderText("Deleting test: " + test + sb);
         alert.setContentText("Are you sure? Press OK to confirm, or cancel to back out");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -344,7 +339,7 @@ public class MainWindowController {
     }
 
     private void setTestListViewToFilteredListBasedOnDates(LocalDate fromDate, LocalDate toDate){
-        filteredList.setPredicate(new Predicate<Test>() {
+        filteredList.setPredicate(new Predicate<>() {
             @Override
             public boolean test(Test test) {
                 if (test.getWhenTaken() == null){
@@ -372,7 +367,7 @@ public class MainWindowController {
             allTasks.addAll(sr.getAllGrades().keySet());
         }
 
-        List<Task> sortedTask = allTasks.stream().sorted(new Comparator<Task>() {
+        List<Task> sortedTask = allTasks.stream().sorted(new Comparator<>() {
             @Override
             public int compare(Task o1, Task o2) {
                 return o1.getNumberOfTask().compareTo(o2.getNumberOfTask());
