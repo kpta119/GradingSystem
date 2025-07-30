@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Test {
     private ObjectId id;
@@ -31,7 +32,9 @@ public class Test {
         this.tasksOnTest = new ArrayList<>();
         this.studentResults = new ArrayList<>();
     }
-    public Test(){}
+
+    public Test() {
+    }
 
     public static Test fromDocument(Document doc) {
         String name = doc.getString("name");
@@ -61,7 +64,7 @@ public class Test {
         return test;
     }
 
-    public Document toDocument(){
+    public Document toDocument() {
         List<Document> taskDocuments = tasksOnTest.stream()
                 .map(Task::toDocument)
                 .toList();
@@ -121,7 +124,7 @@ public class Test {
         return whenTaken.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
-    public void addTask(Task task){
+    public void addTask(Task task) {
         tasksOnTest.add(task);
     }
 
@@ -131,6 +134,19 @@ public class Test {
 
     @Override
     public String toString() {
-        return name + " - When Taken: " +  getWhenTakenString() ;
+        return name + " - When Taken: " + getWhenTakenString();
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj) return true;
+        if (obj == null || obj.getClass() != getClass()) return false;
+
+        Test other = (Test) obj;
+        return id != null && id.equals(other.getId());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

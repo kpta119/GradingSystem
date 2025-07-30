@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -358,6 +359,7 @@ public class MainWindowController {
         stage.setTitle("Detailed Results");
 
         TableView<StudentResult> tableView = new TableView<>();
+        tableView.setEditable(true);
 
         TableColumn<StudentResult, String> nameCol = new TableColumn<>("Name");
         nameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStudentName()));
@@ -383,6 +385,26 @@ public class MainWindowController {
                 String scoreStr = grade != null ? String.valueOf(grade.getScore()) : "-";
                 return new SimpleStringProperty(scoreStr);
             });
+            taskCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            taskCol.setOnEditCommit(event -> {
+                StudentResult sr = event.getRowValue();
+                String newScoreStr = event.getNewValue();
+
+                try {
+                    int newScore = Integer.parseInt(newScoreStr);
+                    sr.editGrade(task, newScore);
+                    String studentName = sr.getStudentName();
+                    TestDAO.getInstance().updateGradeInStudentResult(selectedTest.getId(),studentName, task.toString(), newScore );
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid format: " + newScoreStr);
+                } catch (RuntimeException e) {
+                    System.out.println(e.getMessage());
+                }
+
+                tableView.refresh();
+
+            });
+
             taskCol.setStyle("-fx-alignment: CENTER");
             tableView.getColumns().add(taskCol);
         }
@@ -400,6 +422,9 @@ public class MainWindowController {
 
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
+        stage.setOnHiding(e -> {
+            setTestListViewToFilteredListWantAllTests();
+        });
     }
 
     @NotNull

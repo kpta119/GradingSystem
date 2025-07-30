@@ -48,6 +48,18 @@ public class StudentResult {
         grades.put(task, new Grade(score));
     }
 
+    public void editGrade(Task task, int newScore){
+        if (newScore > task.getMaxPoints()){
+            throw new InvalidScoreException("Score cannot be greater than max points in task");
+        }
+        Grade changedGrade = getGrade(task);
+        if (changedGrade != null) {
+            changedGrade.setScore(newScore);
+        } else {
+            addGrade(task, newScore);
+        }
+    }
+
     public Grade getGrade(Task task) {
         return grades.get(task);
     }

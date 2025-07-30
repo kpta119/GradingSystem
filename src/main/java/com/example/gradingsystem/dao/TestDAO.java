@@ -62,7 +62,15 @@ public class TestDAO {
                 Filters.eq("_id", testId),
                 Updates.pull("studentResults", Filters.eq("studentName", studentName))
         );
+    }
 
+    public void updateGradeInStudentResult(ObjectId testId, String studentName, String taskKey, int newScore){
+        testCollection.updateOne(
+                Filters.and(
+                        Filters.eq("_id", testId),
+                        Filters.elemMatch("studentResults", Filters.eq("studentName", studentName))),
+                Updates.set("studentResults.$.allGrades." + taskKey + ".score", newScore)
+        );
     }
 
 }
