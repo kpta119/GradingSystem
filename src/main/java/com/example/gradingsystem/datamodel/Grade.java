@@ -1,5 +1,7 @@
 package com.example.gradingsystem.datamodel;
 
+import org.bson.Document;
+
 public class Grade {
     private int score;
 
@@ -17,6 +19,10 @@ public class Grade {
         } else {
             throw new IllegalArgumentException("Result cannot be less than 0");
         }
+    }
+
+    public Document toDocument() {
+         return new Document("score", score);
     }
 
     @Override

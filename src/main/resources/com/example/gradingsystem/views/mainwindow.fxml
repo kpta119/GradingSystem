@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@../styles/styles.css"
+            fx:controller="com.example.gradingsystem.controllers.MainWindowController">
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="Tests">
+                    <MenuItem text="New" onAction="#showNewTestDialog"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Exit"/>
+                </Menu>
+            </MenuBar>
+            <ToolBar>
+                <HBox>
+                    <Button fx:id="newTestButton" onAction="#showNewTestDialog">
+                        <tooltip>
+                                <Tooltip text="Add a new Test"/>
+                        </tooltip>
+                        <graphic>
+                            <ImageView fx:id="imageViewPlusLogo" fitWidth="24" fitHeight="28"/>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="filterDateButton" text="All tests" onAction="#handleFilterDateButton" minWidth="60" prefHeight="30">
+                        <tooltip>
+                            <Tooltip text="Select date range"/>
+                        </tooltip>
+                    </Button>
+                    <Button onAction="#rollbackToAllTests">
+                        <tooltip>
+                            <Tooltip text="Show all Tests"/>
+                        </tooltip>
+                        <graphic>
+                            <ImageView fx:id="imageViewRollback" fitWidth="24" fitHeight="28"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </ToolBar>
+        </VBox>
+    </top>
+    <left>
+        <ListView fx:id="testListView" prefWidth="600" styleClass="list-cell">
+        </ListView>
+    </left>
+    <center>
+        <VBox>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                <VBox fx:id="vboxArea" style="-fx-background-color: white" alignment="CENTER"/>
+            </ScrollPane>
+            <HBox style="-fx-background-color: white" prefHeight="50">
+                <Button text="Add student's result from test" alignment="BOTTOM_LEFT" prefHeight="50" onAction="#showNewStudentResultsDialog"
+                        styleClass="light-green-button"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button text="Delete student's result from test" alignment="TOP_RIGHT" prefHeight="50" onAction="#deleteStudentResults"
+                        styleClass="light-red-button"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

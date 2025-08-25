@@ -1,20 +1,28 @@
 package com.example.gradingsystem.datamodel;
 
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Test {
+    private ObjectId id;
     private LocalDate whenTaken;
     private String name;
-    private List<Task> tasksOnTest;
-    private List<StudentResult> studentResults;
+    private List<Task> tasksOnTest = new ArrayList<>();
+    private List<StudentResult> studentResults = new ArrayList<>();
 
 
     public Test(String name, LocalDate whenTaken, List<Task> tasksOnTest) {
         this.name = name;
         this.whenTaken = whenTaken;
-        this.tasksOnTest = tasksOnTest;
+        this.tasksOnTest = new ArrayList<>(tasksOnTest);
         this.studentResults = new ArrayList<>();
     }
 
@@ -24,8 +32,57 @@ public class Test {
         this.tasksOnTest = new ArrayList<>();
         this.studentResults = new ArrayList<>();
     }
-    public Test(){}
 
+    public Test() {
+    }
+
+    public static Test fromDocument(Document doc) {
+        String name = doc.getString("name");
+        Date whenTakenDate = doc.getDate("whenTaken");
+        LocalDate whenTaken = whenTakenDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        List<Document> taskDocs = doc.getList("tasks", Document.class);
+        List<Task> tasks = new ArrayList<>();
+        for (Document taskDoc : taskDocs) {
+            tasks.add(Task.fromDocument(taskDoc));
+        }
+
+        List<Document> resultDocs = doc.getList("studentResults", Document.class);
+        List<StudentResult> studentResults = new ArrayList<>();
+        for (Document resultDoc : resultDocs) {
+            studentResults.add(StudentResult.fromDocument(resultDoc));
+        }
+
+        Test test = new Test(name, whenTaken, tasks);
+        test.setId(doc.getObjectId("_id"));
+        for (StudentResult sr : studentResults) {
+            test.addStudentResult(sr);
+        }
+
+        return test;
+    }
+
+    public Document toDocument() {
+        List<Document> taskDocuments = tasksOnTest.stream()
+                .map(Task::toDocument)
+                .toList();
+
+        List<Document> studentsResultsDocuments = studentResults.stream()
+                .map(StudentResult::toDocument)
+                .toList();
+
+
+        return new Document("name", name)
+                .append("whenTaken", whenTaken)
+                .append("tasks", taskDocuments)
+                .append("studentResults", studentsResultsDocuments);
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -43,6 +100,10 @@ public class Test {
         this.studentResults = studentResults;
     }
 
+    public ObjectId getId() {
+        return id;
+    }
+
     public List<StudentResult> getStudentResults() {
         return studentResults;
     }
@@ -55,11 +116,15 @@ public class Test {
         return name;
     }
 
-    public String getWhenTaken() {
-        return whenTaken.format(GradingSystemData.getInstance().getDateFormatter());
+    public LocalDate getWhenTaken() {
+        return whenTaken;
     }
 
-    public void addTask(Task task){
+    public String getWhenTakenString() {
+        return whenTaken.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    }
+
+    public void addTask(Task task) {
         tasksOnTest.add(task);
     }
 
@@ -69,6 +134,19 @@ public class Test {
 
     @Override
     public String toString() {
-        return name + " When Taken: " +  getWhenTaken() ;
+        return name + " - When Taken: " + getWhenTakenString();
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj) return true;
+        if (obj == null || obj.getClass() != getClass()) return false;
+
+        Test other = (Test) obj;
+        return id != null && id.equals(other.getId());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

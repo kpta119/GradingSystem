@@ -1,0 +1,119 @@
+.green-button {
+    -fx-background-color: #0da80d;
+    -fx-text-fill: white;
+    x-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand
+}
+
+.green-button:hover {
+    -fx-background-color: #0b4c0d;
+    -fx-border-color: #2e7d32
+}
+
+.test-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-padding: 10px;
+}
+
+.light-green-button {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-border-radius: 20;
+    -fx-padding: 10
+}
+
+.light-green-button:hover {
+    -fx-background-color: #07700c;
+    -fx-border-color: #2e7d32
+}
+
+.light-red-button {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-color: #bf3939;
+    -fx-text-fill: white;
+    -fx-border-radius: 20;
+    -fx-padding: 10
+}
+
+.light-red-button:hover {
+    -fx-background-color: #ae1010;
+    -fx-border-color: #751717;
+}
+
+.list-cell {
+    -fx-font-size: 18px;
+}
+
+.task-header {
+    fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-padding: 0 0 5px 0;
+    -fx-font-weight: bold;
+}
+
+.stats-flow {
+    -fx-background-color: #f8f8f8;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-background-insets: 0;
+    -fx-border-color: #d0d0d0;
+    -fx-border-width: 1px;
+}
+
+.stats-text {
+    -fx-font-size: 16px;
+    -fx-fill: #333333;
+}
+
+.task-container {
+    -fx-border-color: lightgray;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+
+.no-results-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: red;
+}
+
+.table-view {
+    -fx-border-color: transparent;
+}
+
+.table-view .virtual-flow .clipped-container {
+    -fx-background-color: linear-gradient(#b0f377 0%, #97df84 100%);
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #bcbaba;
+    -fx-border-width: 2px;
+    -fx-border-color: grey;
+}
+
+.table-view .column-header-background .label {
+    -fx-text-fill: black;
+}
+
+.table-view .table-row-cell:filled:selected .text {
+    -fx-fill: black;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #b4d57f;
+}
