@@ -77,12 +77,7 @@ public class MainWindowController {
 
 
 
-        wantAllTests = new Predicate<>() {
-            @Override
-            public boolean test(Test test) {
-                return true;
-            }
-        };
+        wantAllTests = test -> true;
         filteredList = new FilteredList<>(baseList, wantAllTests);
 
         sortedList = new SortedList<>(filteredList, new Comparator<>() {
@@ -117,7 +112,6 @@ public class MainWindowController {
             };
         });
     }
-
 
 
     private void showTestGeneralStatistics() {
@@ -341,14 +335,11 @@ public class MainWindowController {
 
     private void setTestListViewToFilteredListBasedOnDates(LocalDate fromDate, LocalDate toDate){
         Test selectedTest = testListView.getSelectionModel().getSelectedItem();
-        filteredList.setPredicate(new Predicate<>() {
-            @Override
-            public boolean test(Test test) {
-                if (test.getWhenTaken() == null){
-                    return false;
-                }
-                return ((!test.getWhenTaken().isBefore(fromDate)) && (!test.getWhenTaken().isAfter(toDate)));
+        filteredList.setPredicate(test -> {
+            if (test.getWhenTaken() == null){
+                return false;
             }
+            return ((!test.getWhenTaken().isBefore(fromDate)) && (!test.getWhenTaken().isAfter(toDate)));
         });
         testListView.setItems(sortedList);
         refreshItemsOnTestListView(selectedTest);
