@@ -156,7 +156,7 @@ public class MainWindowController {
         VBox taskContainer = new VBox();
         taskContainer.getStyleClass().add("task-container");
 
-        Label headerTaskLabel = new Label("Task " + task.getNumberOfTask());
+        Label headerTaskLabel = new Label("Task " + task.getNumberOfTask() + " " + task.getType().name());
         headerTaskLabel.getStyleClass().add("task-header");
 
         if (stats.hasResults()) {
@@ -378,33 +378,7 @@ public class MainWindowController {
         }).toList();
 
         for (Task task : sortedTask) {
-            TableColumn<StudentResult, String> taskCol = new TableColumn<>("Task " + task.getNumberOfTask());
-            taskCol.setCellValueFactory(data -> {
-                Grade grade = data.getValue().getAllGrades().get(task);
-                String scoreStr = grade != null ? String.valueOf(grade.getScore()) : "-";
-                return new SimpleStringProperty(scoreStr);
-            });
-            taskCol.setCellFactory(TextFieldTableCell.forTableColumn());
-            taskCol.setOnEditCommit(event -> {
-                StudentResult sr = event.getRowValue();
-                String newScoreStr = event.getNewValue();
-
-                try {
-                    int newScore = Integer.parseInt(newScoreStr);
-                    sr.editGrade(task, newScore);
-                    String studentName = sr.getStudentName();
-                    TestDAO.getInstance().updateGradeInStudentResult(selectedTest.getId(),studentName, task.toString(), newScore );
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid format: " + newScoreStr);
-                } catch (RuntimeException e) {
-                    System.out.println(e.getMessage());
-                }
-
-                tableView.refresh();
-
-            });
-
-            taskCol.setStyle("-fx-alignment: CENTER");
+            TableColumn<StudentResult, String> taskCol = getStudentResultStringTableColumn(selectedTest, task, tableView);
             tableView.getColumns().add(taskCol);
         }
 
@@ -415,7 +389,7 @@ public class MainWindowController {
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         VBox layout = new VBox(tableView);
-        Scene scene = new Scene(layout, 800, 800);
+        Scene scene = new Scene(layout, 1200, 900);
         scene.getStylesheets().add(getClass().getResource("/com/example/gradingsystem/styles/styles.css").toExternalForm());
         stage.setScene(scene);
 
@@ -424,6 +398,38 @@ public class MainWindowController {
         stage.setOnHiding(e -> {
             rollbackToAllTests();
         });
+    }
+
+    @NotNull
+    private static TableColumn<StudentResult, String> getStudentResultStringTableColumn(Test selectedTest, Task task, TableView<StudentResult> tableView) {
+        TableColumn<StudentResult, String> taskCol = new TableColumn<>("Task " + task.getNumberOfTask() + "\n" + task.getType().name());
+        taskCol.setCellValueFactory(data -> {
+            Grade grade = data.getValue().getAllGrades().get(task);
+            String scoreStr = grade != null ? String.valueOf(grade.getScore()) : "-";
+            return new SimpleStringProperty(scoreStr);
+        });
+        taskCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        taskCol.setOnEditCommit(event -> {
+            StudentResult sr = event.getRowValue();
+            String newScoreStr = event.getNewValue();
+
+            try {
+                int newScore = Integer.parseInt(newScoreStr);
+                sr.editGrade(task, newScore);
+                String studentName = sr.getStudentName();
+                TestDAO.getInstance().updateGradeInStudentResult(selectedTest.getId(),studentName, task.toString(), newScore );
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid format: " + newScoreStr);
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+            }
+
+            tableView.refresh();
+
+        });
+
+        taskCol.setStyle("-fx-alignment: CENTER");
+        return taskCol;
     }
 
     @NotNull
