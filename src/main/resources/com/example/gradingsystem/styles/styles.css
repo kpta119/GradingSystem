@@ -53,8 +53,7 @@
 }
 
 .task-header {
-    fx-font-weight: bold;
-    -fx-font-size: 18px;
+    -fx-font-size: 20px;
     -fx-padding: 0 0 5px 0;
     -fx-font-weight: bold;
 }
@@ -77,6 +76,7 @@
     -fx-border-color: lightgray;
     -fx-border-radius: 5;
     -fx-padding: 10;
+    -fx-font-size: 16px;
 }
 
 .no-results-label {

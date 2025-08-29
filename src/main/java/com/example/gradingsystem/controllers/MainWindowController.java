@@ -1,5 +1,6 @@
 package com.example.gradingsystem.controllers;
 
+import com.example.gradingsystem.dao.TaskStatistics;
 import com.example.gradingsystem.dao.TestDAO;
 import com.example.gradingsystem.datamodel.Grade;
 import com.example.gradingsystem.datamodel.StudentResult;
@@ -21,6 +22,9 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
@@ -113,6 +117,75 @@ public class MainWindowController {
         });
     }
 
+    private Label createHeader(Test test){
+        String headerText = "Test statistics: " + test.getName() + "\n";
+        Label header = new Label(headerText);
+        header.setFont(Font.font("Times", FontWeight.BOLD, 20));
+        header.setTextFill(Color.BLACK);
+        return header;
+    }
+
+    private TaskStatistics calculateStatistics(Task task, List<StudentResult> results) {
+        List<Integer> scores = new ArrayList<>();
+        Map<Integer, String> scoreToStudent = new HashMap<>();
+
+        for (StudentResult res : results) {
+            Grade grade = res.getAllGrades().get(task);
+            if (grade != null) {
+                int score = grade.getScore();
+                scores.add(score);
+                scoreToStudent.put(score, res.getStudentName());
+            }
+        }
+
+        if (scores.isEmpty()) {
+            return new TaskStatistics(false, 0, 0, "", "", 0, 0);
+        }
+
+        int max = Collections.max(scores);
+        int min = Collections.min(scores);
+        double mean = scores.stream().mapToInt(i -> i).average().orElse(0);
+        double variance = scores.stream().mapToDouble(s -> Math.pow(s - mean, 2)).average().orElse(0);
+
+        return new TaskStatistics(true, max, min, scoreToStudent.get(max), scoreToStudent.get(min), mean, Math.sqrt(variance));
+    }
+
+    private VBox createTaskStatistics(Task task, List<StudentResult> results) {
+        TaskStatistics stats = calculateStatistics(task, results);
+
+        VBox taskContainer = new VBox();
+        taskContainer.getStyleClass().add("task-container");
+
+        Label headerTaskLabel = new Label("Task " + task.getNumberOfTask());
+        headerTaskLabel.getStyleClass().add("task-header");
+
+        if (stats.hasResults()) {
+            String text = String.format(
+                    "Max Points: %d\nThe best student: %s (%d) / %d\nThe worst student: %s (%d) / %d\nAverage: %.2f\nStandard deviation: %.2f",
+                    task.getMaxPoints(),
+                    stats.bestStudent(), stats.maxScore(), task.getMaxPoints(),
+                    stats.worstStudent(), stats.minScore(), task.getMaxPoints(),
+                    stats.mean(), stats.stdDev()
+            );
+            TextFlow statsFlow = new TextFlow(new Text(text));
+            statsFlow.getStyleClass().add("stats-flow");
+            taskContainer.getChildren().addAll(headerTaskLabel, statsFlow);
+        } else {
+            Label noResultsLabel = new Label("No Results available");
+            noResultsLabel.getStyleClass().add("no-results-label");
+            taskContainer.getChildren().addAll(headerTaskLabel, noResultsLabel);
+        }
+
+        return taskContainer;
+    }
+
+    private Button createDetailedResultsButton(Test test){
+        Button showDetailedResultsButton = new Button();
+        showDetailedResultsButton.setText("Show detailed test results");
+        showDetailedResultsButton.getStyleClass().add("green-button");
+        showDetailedResultsButton.setOnAction(event -> openDetailedResultsWindow(test));
+        return showDetailedResultsButton;
+    }
 
     private void showTestGeneralStatistics() {
         Test selectedTest = testListView.getSelectionModel().getSelectedItem();
@@ -127,80 +200,15 @@ public class MainWindowController {
             return;
         }
 
-        String headerTestDescription = "Test statistics: " + selectedTest.getName() + "\n";
-        testHeader.setText(headerTestDescription);
+        vboxArea.getChildren().add(createHeader(selectedTest));
 
         List<Task> taskFromSelectedTest = selectedTest.getTasksOnTest();
-        List<StudentResult> resultsFromSelectedTest = selectedTest.getStudentResults();
-
         for (Task task : taskFromSelectedTest) {
-            StringBuilder stats = new StringBuilder();
-            List<Integer> scores = new ArrayList<>();
-            Map<Integer, String> scoreToStudent = new HashMap<>();
+            VBox taskStatsVbox = createTaskStatistics(task, selectedTest.getStudentResults());
+            vboxArea.getChildren().add(taskStatsVbox);
 
-            for (StudentResult studentRes : resultsFromSelectedTest) {
-                if (studentRes.getAllGrades().containsKey(task)) {
-                    Grade grade = studentRes.getAllGrades().get(task);
-                    int score = grade.getScore();
-                    scores.add(score);
-                    scoreToStudent.put(score, studentRes.getStudentName());
-                }
             }
-
-            if (!scores.isEmpty()) {
-                int maxScore = Collections.max(scores);
-                int minScore = Collections.min(scores);
-                String bestStudent = scoreToStudent.get(maxScore);
-                String worstStudent = scoreToStudent.get(minScore);
-
-                double mean = scores.stream().mapToInt(Integer::intValue).average().orElse(0);
-                double variance = scores.stream().mapToDouble(s -> Math.pow(s - mean, 2)).average().orElse(0);
-                double stdDev = Math.sqrt(variance);
-
-                VBox taskContainer = new VBox();
-                VBox.setVgrow(taskContainer, Priority.NEVER);
-                taskContainer.getStyleClass().add("task-container");
-
-                Label headerTaskLabel = new Label("Task " + task.getNumberOfTask());
-                headerTaskLabel.getStyleClass().add("task-header");
-
-                stats.append(String.format("Max Points: %d\n", task.getMaxPoints()));
-                stats.append(String.format("The best student: %s (%d) / %d \n", bestStudent, maxScore, task.getMaxPoints()));
-                stats.append(String.format("The worst student: %s (%d) / %d\n", worstStudent, minScore, task.getMaxPoints()));
-                stats.append(String.format("Average: %.2f\n", mean));
-                stats.append(String.format("Standard deviation: %.2f\n", stdDev));
-
-                TextFlow statsFlow = new TextFlow();
-                statsFlow.setMaxWidth(300);
-                statsFlow.setPadding(new Insets(5));
-                statsFlow.getStyleClass().add("stats-flow");
-                statsFlow.setMaxWidth(Double.MAX_VALUE);
-
-                Text statsText = new Text(stats.toString());
-                statsText.getStyleClass().add("stats-text");
-                statsFlow.getChildren().add(statsText);
-                taskContainer.getChildren().addAll(headerTaskLabel, statsFlow);
-                vboxArea.getChildren().add(taskContainer);
-                continue;
-            }
-
-            VBox taskContainer = new VBox();
-            VBox.setVgrow(taskContainer, Priority.NEVER);
-            taskContainer.getStyleClass().add("task-container");
-
-            Label headerTaskLabel = new Label("Task " + task.getNumberOfTask());
-            headerTaskLabel.getStyleClass().add("task-header");
-
-            Label noResultsLabel = new Label("No Results available");
-            noResultsLabel.getStyleClass().add("no-results-label");
-            taskContainer.getChildren().addAll(headerTaskLabel, noResultsLabel);
-            vboxArea.getChildren().add(taskContainer);
-        }
-        Button showDetailedResultsButton = new Button();
-        showDetailedResultsButton.setText("Show detailed test results");
-        showDetailedResultsButton.getStyleClass().add("green-button");
-        showDetailedResultsButton.setOnAction(event -> openDetailedResultsWindow(selectedTest));
-        vboxArea.getChildren().add(showDetailedResultsButton);
+        vboxArea.getChildren().add(createDetailedResultsButton(selectedTest));
     }
 
     public void deleteTest(@NotNull Test test) {
@@ -414,7 +422,7 @@ public class MainWindowController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
         stage.setOnHiding(e -> {
-            setTestListViewToFilteredListWantAllTests();
+            rollbackToAllTests();
         });
     }
 

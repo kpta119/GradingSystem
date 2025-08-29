@@ -134,7 +134,7 @@ public class Test {
 
     @Override
     public String toString() {
-        return name + " - When Taken: " + getWhenTakenString();
+        return name + ": " + getWhenTakenString();
     }
 
     @Override
