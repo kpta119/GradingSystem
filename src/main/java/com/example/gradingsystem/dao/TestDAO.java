@@ -1,7 +1,9 @@
 package com.example.gradingsystem.dao;
 
 import com.example.gradingsystem.datamodel.StudentResult;
+import com.example.gradingsystem.datamodel.TaskType;
 import com.example.gradingsystem.datamodel.Test;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
@@ -11,8 +13,9 @@ import javafx.collections.ObservableList;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class TestDAO {
@@ -93,6 +96,73 @@ public class TestDAO {
         return result;
     }
 
+    public List<StudentTestStats> getStudentsStats(String studentName) {
+        List<StudentTestStats> statsList = new ArrayList<>();
+        FindIterable<Document> tests = testCollection.find(Filters.eq("studentResults.studentName", studentName));
 
+        for (Document testDoc: tests){
+            Date whenTaken = testDoc.getDate("whenTaken");
+            LocalDate testDate = whenTaken.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            List<Document> tasks = testDoc.getList("tasks", Document.class);
+            List<Document> studentResults = testDoc.getList("studentResults", Document.class);
+
+            Document studentResult = studentResults.stream()
+                    .filter(s -> studentName.equals(s.getString("studentName")))
+                    .findFirst()
+                    .orElse(null);
+
+            if (studentResult == null) continue;
+
+            Document allGrades = studentResult.get("allGrades", Document.class);
+
+            TaskScores scores =  calculateTaskScores(tasks, allGrades);
+
+            double overallPercentage = (scores.totalMax > 0) ? (100.0 * scores.totalScore / scores.totalMax) : 0;
+
+            Map<TaskType, Double> categoryPercentages = new HashMap<>();
+            for (TaskType type : scores.scoredByCategory.keySet()) {
+                int score = scores.scoredByCategory.get(type);
+                int max = scores.maxByCategory.get(type);
+                double percent = (max > 0) ? (100.0 * score / max) : 0;
+                categoryPercentages.put(type, percent);
+            }
+
+            statsList.add(new StudentTestStats(testDate, overallPercentage, categoryPercentages));
+        }
+        return statsList;
+    }
+
+    private TaskScores calculateTaskScores(List<Document> tasks, Document allGrades) {
+        TaskScores scores = new TaskScores();
+
+        for (Document task : tasks) {
+            String typeStr = task.getString("type");
+            TaskType type = TaskType.valueOf(typeStr);
+
+            int maxPoints = task.getInteger("maxPoints");
+            scores.totalMax += maxPoints;
+            scores.maxByCategory.merge(type, maxPoints, Integer::sum);
+
+            String key = "Task number:" + task.getString("numberOfTask") +
+                    ", maxPoints=" + maxPoints +
+                    ", type=" + typeStr;
+
+            Document gradeDoc = allGrades.get(key, Document.class);
+            int score = (gradeDoc != null) ? gradeDoc.getInteger("score") : 0;
+
+            scores.totalScore += score;
+            scores.scoredByCategory.merge(type, score, Integer::sum);
+        }
+
+        return scores;
+    }
+
+    private static class TaskScores {
+        int totalScore = 0;
+        int totalMax = 0;
+        Map<TaskType, Integer> scoredByCategory = new HashMap<>();
+        Map<TaskType, Integer> maxByCategory = new HashMap<>();
+    }
 }
 

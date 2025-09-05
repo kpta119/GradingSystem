@@ -9,19 +9,19 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.gradingsystem.controllers.StudentsStats"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/styles.css">
     <top>
         <HBox spacing="10">
-            <TextField fx:id="searchField" promptText="Enter student's name and surname..." HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Enter student's name and surname..." HBox.hgrow="ALWAYS" onAction="#onSearchClicked"/>
             <Button text="Search" onAction="#onSearchClicked"/>
         </HBox>
     </top>
     <left>
-        <ListView fx:id="studentsListView" prefWidth="180"/>
+        <ListView fx:id="studentsListView" prefWidth="350"/>
     </left>
     <center>
         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
-            <VBox fx:id="vboxArea" style="-fx-background-color: white" alignment="CENTER"/>
+            <VBox fx:id="vboxArea" style="-fx-background-color: white" alignment="CENTER" spacing="20"/>
         </ScrollPane>
     </center>
 </BorderPane>
