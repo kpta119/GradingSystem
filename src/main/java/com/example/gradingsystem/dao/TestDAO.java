@@ -11,6 +11,10 @@ import javafx.collections.ObservableList;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
 public class TestDAO {
 
     private static TestDAO instance;
@@ -72,6 +76,23 @@ public class TestDAO {
                 Updates.set("studentResults.$.allGrades." + taskKey + ".score", newScore)
         );
     }
+
+    public List<String> getStudents(){
+        return testCollection.distinct("studentResults.studentName", String.class)
+                .into(new ArrayList<>());
+    }
+
+    public List<String> getStudents(Predicate<String> predicate){
+        List<String> allStudents = getStudents();
+        List<String> result = new ArrayList<>();
+        for (String student: allStudents){
+            if (predicate.test(student.toLowerCase())){
+                result.add(student);
+            }
+        }
+        return result;
+    }
+
 
 }
 

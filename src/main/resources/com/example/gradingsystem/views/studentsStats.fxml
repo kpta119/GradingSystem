@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.gradingsystem.controllers.StudentsStats"
+            prefHeight="400.0" prefWidth="600.0">
+    <top>
+        <HBox spacing="10">
+            <TextField fx:id="searchField" promptText="Enter student's name and surname..." HBox.hgrow="ALWAYS"/>
+            <Button text="Search" onAction="#onSearchClicked"/>
+        </HBox>
+    </top>
+    <left>
+        <ListView fx:id="studentsListView" prefWidth="180"/>
+    </left>
+    <center>
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+            <VBox fx:id="vboxArea" style="-fx-background-color: white" alignment="CENTER"/>
+        </ScrollPane>
+    </center>
+</BorderPane>

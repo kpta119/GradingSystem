@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -280,6 +281,27 @@ public class MainWindowController {
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             showTestGeneralStatistics();
+        }
+    }
+
+    @FXML
+    public void showStudentsStatsWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/gradingsystem/views/studentsStats.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Students Statistics");
+            stage.setScene(new Scene(root, 1500, 1000));
+
+
+             stage.initOwner(mainBorderPane.getScene().getWindow());
+             stage.initModality(Modality.APPLICATION_MODAL);
+
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

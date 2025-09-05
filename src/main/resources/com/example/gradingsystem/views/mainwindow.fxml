@@ -8,11 +8,14 @@
             fx:controller="com.example.gradingsystem.controllers.MainWindowController">
     <top>
         <VBox>
-            <MenuBar>
+            <MenuBar styleClass="menu-bar">
                 <Menu text="Tests">
                     <MenuItem text="New" onAction="#showNewTestDialog"/>
                     <SeparatorMenuItem/>
                     <MenuItem text="Exit"/>
+                </Menu>
+                <Menu text="Students">
+                    <MenuItem text="Stats" onAction="#showStudentsStatsWindow"/>
                 </Menu>
             </MenuBar>
             <ToolBar>
