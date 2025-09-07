@@ -285,7 +285,7 @@ public class MainWindowController {
     }
 
     @FXML
-    public void showStudentsStatsWindow() {
+    public StudentsStats showStudentsStatsWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/gradingsystem/views/studentsStats.fxml"));
             Parent root = loader.load();
@@ -294,14 +294,16 @@ public class MainWindowController {
             stage.setTitle("Students Statistics");
             stage.setScene(new Scene(root, 1500, 1000));
 
-
-             stage.initOwner(mainBorderPane.getScene().getWindow());
-             stage.initModality(Modality.APPLICATION_MODAL);
+            StudentsStats controller = loader.getController();
+            stage.initOwner(mainBorderPane.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
 
             stage.show();
+            return controller;
 
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -384,6 +386,27 @@ public class MainWindowController {
 
         TableColumn<StudentResult, String> nameCol = new TableColumn<>("Name");
         nameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStudentName()));
+        nameCol.setCellFactory(col -> {
+            TableCell<StudentResult, String> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty ? null : item);
+                }
+            };
+
+            cell.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !cell.isEmpty()) {
+                    StudentResult sr = cell.getTableRow().getItem();
+                    StudentsStats controller = showStudentsStatsWindow();
+                    if (controller != null) {
+                        controller.showStageForChosenStudent(sr.getStudentName());
+                    }
+                }
+            });
+
+            return cell;
+        });
         tableView.getColumns().add(nameCol);
 
         List<StudentResult> studentResults = selectedTest.getStudentResults();

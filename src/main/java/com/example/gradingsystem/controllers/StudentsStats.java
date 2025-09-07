@@ -42,6 +42,11 @@ public class StudentsStats {
         vboxArea.getChildren().clear();
     }
 
+    public void showStageForChosenStudent(String studentName){
+        studentsListView.getSelectionModel().select(studentName);
+        showStudentChart(studentName);
+    }
+
     private void showStudentChart(String studentName) {
         vboxArea.getChildren().clear();
 
