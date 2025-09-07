@@ -21,6 +21,7 @@ public class Application extends javafx.application.Application {
         Scene scene = new Scene(fxmlLoader.load(), 1500, 1000);
         stage.setTitle("System for entering school results!");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
