@@ -3,6 +3,7 @@ package com.example.gradingsystem.dao;
 import com.example.gradingsystem.datamodel.StudentResult;
 import com.example.gradingsystem.datamodel.TaskType;
 import com.example.gradingsystem.datamodel.Test;
+import com.example.gradingsystem.dtos.StudentTestStats;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;

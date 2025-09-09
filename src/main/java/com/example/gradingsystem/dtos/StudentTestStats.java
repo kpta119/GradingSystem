@@ -1,4 +1,4 @@
-package com.example.gradingsystem.dao;
+package com.example.gradingsystem.dtos;
 
 import com.example.gradingsystem.datamodel.TaskType;
 

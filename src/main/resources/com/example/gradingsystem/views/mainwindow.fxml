@@ -10,12 +10,15 @@
         <VBox>
             <MenuBar styleClass="menu-bar">
                 <Menu text="Tests">
-                    <MenuItem text="New" onAction="#showNewTestDialog"/>
+                    <MenuItem text="New test" onAction="#showNewTestDialog"/>
                     <SeparatorMenuItem/>
                     <MenuItem text="Exit"/>
                 </Menu>
                 <Menu text="Students">
                     <MenuItem text="Stats" onAction="#showStudentsStatsWindow"/>
+                </Menu>
+                <Menu text="Classes">
+                    <MenuItem text="New class" onAction="#showNewClassDialog"/>
                 </Menu>
             </MenuBar>
             <ToolBar>

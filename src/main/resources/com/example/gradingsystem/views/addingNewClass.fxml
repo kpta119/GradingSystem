@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.gradingsystem.controllers.AddingNewClass"
+            prefHeight="800" prefWidth="1000">
+    <content>
+        <GridPane vgap="10" hgap="10">
+            <Label text="Class name " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField fx:id="classNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Students in class:"/>
+            <ListView fx:id="classListView"  GridPane.columnIndex="1" GridPane.rowIndex="0"
+                      prefHeight="500" styleClass="list-cell"/>
+
+            <Label text="Full Name of student:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="fullNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Button text="Add student to class" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                    onAction="#handleAddStudentToClass"/>
+        </GridPane>
+    </content>
+</DialogPane>

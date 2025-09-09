@@ -1,6 +1,6 @@
 package com.example.gradingsystem.controllers;
 
-import com.example.gradingsystem.dao.TaskStatistics;
+import com.example.gradingsystem.dtos.TaskStatistics;
 import com.example.gradingsystem.dao.TestDAO;
 import com.example.gradingsystem.datamodel.Grade;
 import com.example.gradingsystem.datamodel.StudentResult;
@@ -273,6 +273,25 @@ public class MainWindowController {
             controller.setTest(chosenTest);
 
         } catch (IOException e) {
+            System.out.println("Couldn't load the dialog");
+            return;
+        }
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            showTestGeneralStatistics();
+        }
+    }
+
+    @FXML
+    public void showNewClassDialog() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/gradingsystem/views/addingNewClass.fxml"));
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e){
             System.out.println("Couldn't load the dialog");
             return;
         }

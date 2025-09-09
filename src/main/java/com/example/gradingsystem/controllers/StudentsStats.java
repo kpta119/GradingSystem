@@ -1,6 +1,6 @@
 package com.example.gradingsystem.controllers;
 
-import com.example.gradingsystem.dao.StudentTestStats;
+import com.example.gradingsystem.dtos.StudentTestStats;
 import com.example.gradingsystem.dao.TestDAO;
 import com.example.gradingsystem.datamodel.TaskType;
 import javafx.fxml.FXML;

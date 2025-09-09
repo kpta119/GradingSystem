@@ -24,7 +24,7 @@
             <ListView fx:id="taskListView" prefHeight="150" styleClass="list-cell"/>
 
             <GridPane vgap="10" hgap="10">
-                <Label text="Number of task: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label text="Task number: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                 <TextField fx:id="numberOfTaskField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
                 <Label text="Max points:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
